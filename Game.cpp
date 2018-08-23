@@ -5,11 +5,13 @@
 Game::Game()
 {
 	m_IsRunning = true;
+	gfx.BeginFrame();
+	gfx.EndFrame();
 }
 
 Game::~Game(void)
 {
-
+	
 }
 
 void Game::Go()
@@ -47,5 +49,5 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	gfx.PutPixel(gfx::ScreenWidth / 2, gfx::ScreenHeight / 2, Colors::LightGray);
+
 }

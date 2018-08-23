@@ -20,9 +20,11 @@ int main(void)
 		TheGame.Go();
 		double frame_time = frame_timer.elapsed();
 
+		std::cout << 1000 / frame_time << std::endl;
 		if (frame_time < 1000/60.0)
 		{
 			double frame_wait = (1000 / 60.0) - frame_time;
+			
 			std::this_thread::sleep_for(std::chrono::milliseconds((unsigned)frame_wait));
 		}
 	}
