@@ -144,13 +144,13 @@ public:
 
 	void BeginFrame(void)
 	{
-		SDL_SetRenderDrawColor(ren, 123, 213, 132, 255);
+		Color c = Colors::Black;
+		SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+		SDL_RenderClear(ren);
 	}
 
 	void EndFrame(void)
 	{
-		SDL_SetRenderDrawColor(ren, 123, 213, 132, 255);
-		SDL_RenderClear(ren);
 		SDL_RenderPresent(ren);
 	}
 
@@ -158,8 +158,12 @@ public:
 	{
 		SDL_SetRenderDrawColor(ren, color.GetR(), color.GetG(), color.GetB(), color.GetA());
 		SDL_RenderDrawPoint(ren, x, y);
-		SDL_RenderClear(ren);
-		SDL_RenderPresent(ren);
+	}
+
+	void DrawLine(unsigned x1, unsigned y1, unsigned x2, unsigned y2, const Color & color)
+	{
+		SDL_SetRenderDrawColor(ren, color.GetR(), color.GetG(), color.GetB(), color.GetA());
+		SDL_RenderDrawLine(ren, x1, y1, x2, y2);
 	}
 
 	~Graphics(void)
@@ -175,15 +179,33 @@ public:
 class Game
 {
 public:
-	Game(void)
+	Game() {}
+	Game(const Game&) = delete;
+	Game& operator=(const Game&) = delete;
+	~Game(void) {}
+	void Go()
 	{
-
+		HandleInput();
+		ComposeFrame();
+		UpdateModel();
 	}
+private:
+	void HandleInput() {}
+	void ComposeFrame(){}
+	void UpdateModel() {}
 
-	~Game(void)
-	{
+private:
+	Graphics gfx;
+	//CTimer timer;
+};
+class Mouse
+{
 
-	}
+};
+
+class Keyboard
+{
+
 };
 
 int main(void)
@@ -196,7 +218,15 @@ int main(void)
 	{
 		gfx.BeginFrame();
 
-		gfx.PutPixel(500, 500, Colors::Black);
+		gfx.PutPixel(500, 500, Colors::White);
+		gfx.DrawLine(501, 501, 700, 700, Colors::Blue);
+		int x = 0, y = 0;
+		SDL_GetMouseState(&x, &y);
+		//if (SDL_GetMouseState(&x, &y & SDL_BUTTON(SDL_BUTTON_LEFT))
+		{
+			gfx.DrawLine(501, 501, x, y, Colors::MakeRGB((1-y) % 255, y % 255, 123));
+		}
+		
 
 		if (SDL_PollEvent(&e))
 		{
