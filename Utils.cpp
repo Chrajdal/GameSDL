@@ -42,7 +42,7 @@ bool equal(double a, double b)
 	double epsilon = 1e-5;
 	return (std::abs(a - b) < epsilon) ? true : false;
 }
-vector<double> rgb_to_hsv(const Color & c)
+std::vector<double> rgb_to_hsv(const Color & c)
 {
 	double r = c.GetR();
 	double g = c.GetG();
@@ -85,10 +85,10 @@ vector<double> rgb_to_hsv(const Color & c)
 	//if (v * 100.0 >= 100)
 	v = 1.0;
 
-	return vector<double>({ std::round(h * 360), std::round(s * 100), std::round(v * 100) });
+	return std::vector<double>({ std::round(h * 360), std::round(s * 100), std::round(v * 100) });
 }
 
-Color hsv_to_rgb(const vector<double> & hsv)
+Color hsv_to_rgb(const std::vector<double> & hsv)
 {
 	double r, g, b;
 
@@ -120,9 +120,9 @@ Color hsv_to_rgb(const vector<double> & hsv)
 
 Color interpolation(const Color & a, const Color & b, double factor)
 {
-	vector<double> hsvA = rgb_to_hsv(a);
-	vector<double> hsvB = rgb_to_hsv(b);
-	vector<double> hsvcomb =
+	std::vector<double> hsvA = rgb_to_hsv(a);
+	std::vector<double> hsvB = rgb_to_hsv(b);
+	std::vector<double> hsvcomb =
 	{
 		(hsvA[0] * (1 - factor) + hsvB[0] * factor),
 		(hsvA[1] * (1 - factor) + hsvB[1] * factor),
@@ -131,9 +131,9 @@ Color interpolation(const Color & a, const Color & b, double factor)
 	return hsv_to_rgb(hsvcomb);
 }
 
-vector<Color> generate_colors(const Color & start, const Color & end, int number_of_colors)
+std::vector<Color> generate_colors(const Color & start, const Color & end, int number_of_colors)
 {
-	vector<Color> res;
+	std::vector<Color> res;
 	for (int i = 0; i < number_of_colors; i++)
 	{
 		Color rgb = interpolation(start, end, (double)i / (std::max(number_of_colors, 2) - 1));

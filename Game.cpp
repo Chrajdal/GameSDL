@@ -1,12 +1,13 @@
 #include "Game.h"
 
-#include <iostream>
-
 Game::Game()
 {
 	m_IsRunning = true;
 	gfx.BeginFrame();
 	gfx.EndFrame();
+
+
+	img.LoadData("Main Character.png");
 }
 
 Game::~Game(void)
@@ -49,5 +50,7 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	gfx.DrawCircle(gfx.ScreenWidth / 2, gfx.ScreenHeight / 2, 50, Colors::MakeRGB(123, 231, 132));
 
+	gfx.DrawImage(gfx.ScreenWidth / 2, gfx.ScreenHeight / 2, img.GetData());
 }

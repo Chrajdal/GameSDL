@@ -6,11 +6,7 @@
 #include <vector>
 #include <chrono>
 
-//#include "Graphics.h"
 #include "Color.h"
-
-using namespace std;
-using namespace std::chrono;
 
 //-----------------------------------------------------------------------------
 template<typename T>
@@ -49,6 +45,11 @@ struct Tpoint
 	{
 		return !(*this == rhs);
 	}
+	inline bool operator <(const Tpoint<T> & rhs) const
+	{
+		return m_x < rhs.m_x && m_y < rhs.m_y;
+	}
+
 	T m_x;
 	T m_y;
 };
@@ -108,26 +109,26 @@ class CTimer
 public:
 	CTimer(void)
 	{
-		start = chrono::system_clock::now();
+		start = std::chrono::system_clock::now();
 	}
 	inline double elapsed(void) const
 	{
-		return (double)(chrono::duration_cast<chrono::milliseconds>
-			(chrono::system_clock::now() - start)).count();
+		return (double)(std::chrono::duration_cast<std::chrono::milliseconds>
+			(std::chrono::system_clock::now() - start)).count();
 	}
 
 	double elapsed_ns(void) const
 	{
-		return (double)(chrono::duration_cast<chrono::nanoseconds>
-			(chrono::system_clock::now() - start)).count();
+		return (double)(std::chrono::duration_cast<std::chrono::nanoseconds>
+			(std::chrono::system_clock::now() - start)).count();
 	}
 
 	inline void restart(void)
 	{
-		start = chrono::system_clock::now();
+		start = std::chrono::system_clock::now();
 	}
 private:
-	chrono::time_point<chrono::system_clock> start;
+	std::chrono::time_point<std::chrono::system_clock> start;
 };
 //-----------------------------------------------------------------------------
 
@@ -140,10 +141,10 @@ long long sq_distance(const Tpoint <long> & a, const Tpoint<long> & b);
 double sq_distance(const Tpoint<float> & a, const Tpoint<float> & b);
 double sq_distance(const Tpoint<double> & a, const Tpoint<double> & b);
 //-----------------------------------------------------------------------------
-vector<double> rgb_to_hsv(const Color & c);
-Color hsv_to_rgb(const vector<double> & src);
+std::vector<double> rgb_to_hsv(const Color & c);
+Color hsv_to_rgb(const std::vector<double> & src);
 Color interpolation(const Color & a, const Color & b, double factor);
-vector<Color> generate_colors(const Color & start, const Color & end, int number_of_colors);
+std::vector<Color> generate_colors(const Color & start, const Color & end, int number_of_colors);
 //-----------------------------------------------------------------------------
 namespace custom_std
 {

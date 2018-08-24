@@ -3,6 +3,7 @@
 #include "Graphics.h"
 #include "Mouse.h"
 #include "Keyboard.h"
+#include "Utils.h"
 
 class Game
 {
@@ -24,5 +25,7 @@ private:
 	Mouse mouse;
 	Keyboard kbd;
 	bool m_IsRunning;
+
+	Surface img;
 	//CTimer timer;
 };

@@ -1,6 +1,5 @@
 
 #include "Graphics.h"
-#include <iostream>
 
 Graphics::Graphics(void)
 {
@@ -62,4 +61,51 @@ void Graphics::DrawLine(unsigned x1, unsigned y1, unsigned x2, unsigned y2, cons
 {
 	SDL_SetRenderDrawColor(ren, color.GetR(), color.GetG(), color.GetB(), color.GetA());
 	SDL_RenderDrawLine(ren, x1, y1, x2, y2);
+}
+
+void Graphics::DrawCircle(int _x, int _y, int radius, const Color & c)
+{
+	int x = radius - 1;
+	int y = 0;
+	int dx = 1;
+	int dy = 1;
+	int err = dx - (radius << 1);
+	while (x >= y)
+	{
+		PutPixel(_x + x, _y + y, c);
+		PutPixel(_x + y, _y + x, c);
+		PutPixel(_x - y, _y + x, c);
+		PutPixel(_x - x, _y + y, c);
+		PutPixel(_x - x, _y - y, c);
+		PutPixel(_x - y, _y - x, c);
+		PutPixel(_x + y, _y - x, c);
+		PutPixel(_x + x, _y - y, c);
+		if (err <= 0)
+		{
+			y++;
+			err += dy;
+			dy += 2;
+		}
+		if (err > 0)
+		{
+			x--;
+			dx += 2;
+			err += (-radius << 1) + dx;
+		}
+	}
+}
+
+void Graphics::DrawImage(int x, int y, SDL_Surface * srf)
+{
+	if (srf == NULL)
+		return;
+
+	SDL_Rect pos;
+	pos.x = x;
+	pos.y = y;
+	pos.w = srf->w;
+	pos.h = srf->h;
+
+	SDL_Texture * texture = SDL_CreateTextureFromSurface(ren, srf);
+	SDL_RenderCopy(ren, texture, NULL, &pos);
 }
