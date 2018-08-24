@@ -7,7 +7,23 @@
 #include <iostream>
 
 #include "Color.h"
-#include "Image.h"
+
+class Graphics;
+
+class Image
+{
+public:
+	Image(void);
+	~Image(void);
+
+	bool LoadData(Graphics & gfx, const std::string & file_name);
+	SDL_Texture * GetData(void)const;
+private:
+	SDL_Texture * m_texture;
+public:
+	int m_width;
+	int m_height;
+};
 
 class Graphics
 {
@@ -27,7 +43,7 @@ public:
 
 	inline unsigned width(void) { return ScreenWidth; }
 	inline unsigned height(void){ return ScreenHeight; }	
-private:
+public:
 	SDL_Window * wnd;
 	SDL_Renderer * ren;
 

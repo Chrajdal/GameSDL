@@ -45,16 +45,9 @@ public:
 
 
 QuadTree terrain;
-Camera cam;
 Image tile_sheet_dirt;
-//tile_sheet_dirt.LoadFile(".\\Assets\\grass.bmp");
 Image tile_sheet_stone;
-
-//tile_sheet_stone.LoadFile(".\\Assets\\stone.bmp");
-//Bitmap player_bmp(".\\Assets\\Main Character.bmp");
 std::vector<Trect<int>> tile_map_rects;
-
-
 Image player_img;
 Random rnd;
 double dx = 1e-1;
@@ -67,26 +60,24 @@ constexpr int tile_size = 16;
 tile_type selected_tile = tile_type::dirt;
 Player player(player_img);
 
-
 Game::Game()
 {
 	m_IsRunning = true;
 	gfx.BeginFrame();
 	gfx.EndFrame();
 	
-	tile_sheet_dirt.LoadData("./Assets/grass tile sheet.png");
-	tile_sheet_stone.LoadData("./Assets/stone tile sheet.png");
+	tile_sheet_dirt.LoadData(gfx, "./Assets/grass tile sheet.png");
+	tile_sheet_stone.LoadData(gfx, "./Assets/stone tile sheet.png");
 	if (tile_sheet_dirt.GetData() == NULL || tile_sheet_stone.GetData() == NULL)
 	{
 		m_IsRunning = false;
 		std::cout << "asdfasdfadsfasdf" << std::endl;
 		return;
 	}
-
-
-	for (int j = 0; j < tile_sheet_dirt.GetData()->h / tile_size; ++j)
+	
+	for (int i = 0; i < tile_sheet_dirt.m_width / tile_size; ++i)
 	{
-		for (int i = 0; i < tile_sheet_dirt.GetData()->w / tile_size; ++i)
+		for (int j = 0; j < tile_sheet_dirt.m_height / tile_size; ++j)
 		{
 			Trect<int> res{ {i * tile_size, j * tile_size}, { i * tile_size + tile_size,j * tile_size + tile_size } };
 			//res.x = i * tile_size;
@@ -96,6 +87,39 @@ Game::Game()
 			tile_map_rects.push_back(res);
 		}
 	}
+
+
+	int tmp = -200;
+	for (int i = (int)((tmp + 0 + cam.m_x) / tile_size); i < (int)((1024 + cam.m_x - tmp) / tile_size); ++i)
+	{
+		for (int j = (int)((tmp + 0 + cam.m_y) / tile_size); j < (int)((1024 + cam.m_y - tmp) / tile_size); ++j)
+		{
+			double height_treshold = perlin::noise(/*i * dx * 0.1, */ perlin::noise(i * dx * 0.05)) * 100;
+			double stone_threshold = perlin::noise(j * dx * 0.1) * 200;
+			int x = i;
+			int y = j;
+			if (height_treshold > j)
+			{
+				terrain.insert(Node(x, y, tile_type::air));
+			}
+			else if (height_treshold <= j && height_treshold > j - stone_threshold)
+			{
+				terrain.insert(Node(x, y, tile_type::dirt));
+			}
+			else if (height_treshold <= j - stone_threshold)
+			{
+				double noise = perlin::noise(i * dx, j * dy);
+				if (noise > 0.0)
+					terrain.insert(Node(x, y, tile_type::dirt));
+				else
+					terrain.insert(Node(x, y, tile_type::stone));
+			}
+		}
+	}
+
+
+
+
 }
 
 Game::~Game(void)
@@ -119,24 +143,63 @@ void Game::HandleInput()
 	SDL_Event e;
 	if (SDL_PollEvent(&e))
 	{
-		switch(e.type)
+	}
+	
+	const Uint8* keystate = SDL_GetKeyboardState(NULL);
+	//continuous-response keys
+	if (keystate != NULL)
+	{
+		if (keystate[SDL_SCANCODE_ESCAPE])
 		{
-		case SDL_KEYDOWN:
-			switch (e.key.keysym.sym)
-			{
-			case SDLK_ESCAPE: m_IsRunning = false; break;
-			}
-		break;
+			m_IsRunning = false;
+			return;
+		}
+		if (keystate[SDL_SCANCODE_LEFT])
+		{
+			cam.m_x -= 1e1;
+		}
+		if (keystate[SDL_SCANCODE_RIGHT])
+		{
+			cam.m_x += 1e1;
+		}
+		if (keystate[SDL_SCANCODE_UP])
+		{
+			cam.m_y -= 1e1;
+		}
+		if (keystate[SDL_SCANCODE_DOWN])
+		{
+			cam.m_y += 1e1;
 		}
 	}
+	
+
+	//SDL_Event e;
+	//if (SDL_PollEvent(&e))
+	//{
+	//	
+	//	switch(e.type)
+	//	{
+	//	case SDL_KEYDOWN:
+	//		switch (e.key.keysym.sym)
+	//		{
+	//		case SDLK_ESCAPE: m_IsRunning = false; break;
+	//
+	//		//case SDLK_UP:    cam.m_y -= 1e1; break;
+	//		//case SDLK_DOWN:  cam.m_y += 1e1; break;
+	//		//case SDLK_LEFT:  cam.m_x -= 1e1; break;
+	//		//case SDLK_RIGHT: cam.m_x += 1e1; break;
+	//		}
+	//	break;
+	//	}
+	//}
 }
 
 void Game::UpdateModel()
 {
 	int tmp = -200;
-	for (int i = (int)((tmp + 0 + cam.m_x) / tile_size); i < (int)((1024 + cam.m_x - tmp) / tile_size); ++i)
+	for (int i = (int)((tmp + 0 + cam.m_x) / tile_size); i < (int)((gfx.width() + cam.m_x - tmp) / tile_size); ++i)
 	{
-		for (int j = (int)((tmp + 0 + cam.m_y) / tile_size); j < (int)((1024 + cam.m_y - tmp) / tile_size); ++j)
+		for (int j = (int)((tmp + 0 + cam.m_y) / tile_size); j < (int)((gfx.height() + cam.m_y - tmp) / tile_size); ++j)
 		{
 			double height_treshold = perlin::noise(/*i * dx * 0.1, */ perlin::noise(i * dx * 0.05)) * 100;
 			double stone_threshold = perlin::noise(j * dx * 0.1) * 200;
@@ -171,10 +234,10 @@ Trect<int> const & pick_correct_tile_rect(int x, int y, const QuadTree & terrain
 	if (!up.empty() && !dw.empty() && !lf.empty() && !rt.empty())
 	{
 		std::bitset<4> draw_flag;
-		draw_flag[3] = bool(up[0]->m_tile != tile_type::air);
-		draw_flag[2] = bool(dw[0]->m_tile != tile_type::air);
-		draw_flag[1] = bool(lf[0]->m_tile != tile_type::air);
-		draw_flag[0] = bool(rt[0]->m_tile != tile_type::air);
+		draw_flag[0] = bool(up[0]->m_tile != tile_type::air);
+		draw_flag[1] = bool(dw[0]->m_tile != tile_type::air);
+		draw_flag[2] = bool(lf[0]->m_tile != tile_type::air);
+		draw_flag[3] = bool(rt[0]->m_tile != tile_type::air);
 		uint8_t flag = (uint8_t)draw_flag.to_ulong();
 
 		switch (flag)
@@ -203,7 +266,9 @@ Trect<int> const & pick_correct_tile_rect(int x, int y, const QuadTree & terrain
 void Game::ComposeFrame()
 {
 	// offset screen by cam
-	Trect<double> screen({ 0 + cam.m_x,0 + cam.m_y }, { gfx.width() + cam.m_x, gfx.height() + cam.m_y });
+	Trect<double> screen(
+		{ 0 + cam.m_x - tile_size,0 + cam.m_y - tile_size },
+		{ gfx.width() + cam.m_x + tile_size, gfx.height() + cam.m_y + tile_size });
 
 	// scale screen to pick up only tile_size'th od the pixels
 	screen.m_upleft.m_x /= tile_size;
@@ -213,15 +278,13 @@ void Game::ComposeFrame()
 
 	std::vector<const Node *> vec = terrain.range(screen);
 
-	std::cout << vec.size() << std::endl;
-
 	for (const auto & i : vec)
 	{
 		int x = (int)(i->m_x * tile_size - cam.m_x);
 		int y = (int)(i->m_y * tile_size - cam.m_y);
-
-		if (x >= 0 && x + tile_size < (int)gfx.width() &&
-			y >= 0 && y + tile_size < (int)gfx.height())
+	
+		if (x >= 0 - tile_size && x + tile_size < (int)gfx.width()  + tile_size &&
+			y >= 0 - tile_size && y + tile_size < (int)gfx.height() + tile_size)
 		{
 			if (i->m_tile == tile_type::dirt)
 			{
@@ -248,4 +311,5 @@ void Game::ComposeFrame()
 	//gfx.draw_rect((int)Graphics::ScreenWidth - tile_size, 0, (int)tile_size, Graphics::ScreenHeight, Colors::White);
 	//gfx.draw_rect(0, 0, Graphics::ScreenWidth, (int)tile_size, Colors::White);
 	//gfx.draw_rect(0, (int)Graphics::ScreenHeight - tile_size, Graphics::ScreenWidth, (int)tile_size, Colors::White);
+	
 }

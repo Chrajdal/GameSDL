@@ -1,5 +1,61 @@
-
 #include "Graphics.h"
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Image::Image(void)
+	: m_texture(NULL),
+	m_width(0),
+	m_height(0)
+{}
+Image::~Image(void)
+{
+	if (m_texture != NULL)
+		SDL_DestroyTexture(m_texture);
+}
+
+bool Image::LoadData(Graphics & gfx, const std::string & file_name)
+{
+	//Get rid of preexisting texture
+	if (m_texture != NULL)
+	{
+		SDL_DestroyTexture(m_texture);
+		m_width = 0;
+		m_height = 0;
+	}
+
+	//The final texture
+	SDL_Texture * nTexture = NULL;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = IMG_Load(file_name.c_str());
+	if (loadedSurface == NULL)
+		SDL_Log("IMG_Load failed: %s", SDL_GetError());
+	else
+	{
+		//Create texture from surface pixels
+		nTexture = SDL_CreateTextureFromSurface(gfx.ren, loadedSurface);
+		if (nTexture == NULL)
+			SDL_Log("SDL_CreateTextureFromSurface failed: %s", SDL_GetError());
+		else
+		{
+			//Get image dimensions
+			m_width = loadedSurface->w;
+			m_height = loadedSurface->h;
+		}
+
+		//Get rid of old loaded surface
+		SDL_FreeSurface(loadedSurface);
+	}
+
+	m_texture = nTexture;
+	return m_texture != NULL;
+}
+
+SDL_Texture * Image::GetData(void)const
+{
+	return m_texture;
+}
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 Graphics::Graphics(void)
 {
@@ -12,6 +68,9 @@ Graphics::Graphics(void)
 
 	ScreenHeight = dm.h;
 	ScreenWidth = dm.w;
+
+	ScreenHeight = 512 + 256;
+	ScreenWidth = 512 + 256;
 
 	wnd = SDL_CreateWindow(
 		"The Game",
@@ -28,10 +87,10 @@ Graphics::Graphics(void)
 		SDL_Log("SDL_CreateRenderer failed: %s", SDL_GetError());
 
 	// Toggle Fullscreen
-	Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
-	bool IsFullscreen = SDL_GetWindowFlags(wnd) & FullscreenFlag;
-	SDL_SetWindowFullscreen(wnd, IsFullscreen ? 0 : FullscreenFlag);
-	SDL_ShowCursor(IsFullscreen);
+	//Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
+	//bool IsFullscreen = SDL_GetWindowFlags(wnd) & FullscreenFlag;
+	//SDL_SetWindowFullscreen(wnd, IsFullscreen ? 0 : FullscreenFlag);
+	//SDL_ShowCursor(IsFullscreen);
 }
 
 Graphics::~Graphics(void)
@@ -103,11 +162,10 @@ void Graphics::DrawImage(int x, int y, const Image & img)
 	SDL_Rect pos;
 	pos.x = x;
 	pos.y = y;
-	pos.w = img.GetData()->w;
-	pos.h = img.GetData()->h;
+	pos.w = img.m_width;
+	pos.h = img.m_height;
 
-	SDL_Texture * texture = SDL_CreateTextureFromSurface(ren, img.GetData());
-	SDL_RenderCopy(ren, texture, NULL, &pos);
+	SDL_RenderCopy(ren, img.GetData(), NULL, &pos);
 }
 
 void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int height, const Image & img)
@@ -118,8 +176,6 @@ void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int 
 	SDL_Rect pos;
 	pos.x = x;
 	pos.y = y;
-	//pos.w = img.GetData()->w;
-	//pos.h = img.GetData()->h;
 	pos.w = width;
 	pos.h = height;
 
@@ -129,6 +185,5 @@ void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int 
 	src.w = width;
 	src.h = height;
 
-	SDL_Texture * texture = SDL_CreateTextureFromSurface(ren, img.GetData());
-	SDL_RenderCopy(ren, texture, &src, &pos);
+	SDL_RenderCopy(ren, img.GetData(), &src, &pos);
 }

@@ -90,10 +90,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\include;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\include;C:\SDL2\SDL2_image-2.0.3\include;C:\SDL2\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2_image-2.0.3\include;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2-2.0.8\include;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\include;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\include;C:\SDL2\SDL2_image-2.0.3\include;C:\SDL2\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\lib;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\lib;C:\SDL2\SDL2_image-2.0.3\lib\x64;C:\SDL2\SDL2-2.0.8\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\lib;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\lib;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2-2.0.8\lib;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2_image-2.0.3\lib;C:\SDL2\SDL2_image-2.0.3\lib\x64;C:\SDL2\SDL2-2.0.8\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -124,12 +124,12 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\include;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\include;C:\SDL2\SDL2_image-2.0.3\include;C:\SDL2\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2-2.0.8\include;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2_image-2.0.3\include;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\include;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\include;C:\SDL2\SDL2_image-2.0.3\include;C:\SDL2\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\lib;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\lib;C:\SDL2\SDL2_image-2.0.3\lib\x64;C:\SDL2\SDL2-2.0.8\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2-2.0.8\lib;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2_image-2.0.3\lib;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\lib;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\lib;C:\SDL2\SDL2_image-2.0.3\lib\x64;C:\SDL2\SDL2-2.0.8\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -144,7 +144,6 @@
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Random.cpp" />
-    <ClCompile Include="Image.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -159,7 +158,6 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Random.h" />
-    <ClInclude Include="Image.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>

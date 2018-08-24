@@ -4,15 +4,15 @@
 #include <algorithm>
 #include <functional>
 
+#include "Camera.h"
 #include "Graphics.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Utils.h"
-#include "Image.h"
 #include "QuadTree.h"
 #include "Geometry.h"
 #include "Random.h"
-#include "Camera.h"
+
 
 class Game
 {
@@ -34,6 +34,8 @@ private:
 	Mouse mouse;
 	Keyboard kbd;
 	bool m_IsRunning;
+
+	Camera cam;
 
 	CTimer timer;
 };

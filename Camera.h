@@ -12,7 +12,7 @@ public:
 		
 		SDL_DisplayMode dm;
 		if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
-			SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+			SDL_Log("SDL_GetDesktopDisplayMode failed in Camera CONSTRUCTOR: %s", SDL_GetError());
 
 		m_width = dm.w;
 		m_height = dm.h;
