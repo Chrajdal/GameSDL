@@ -1,9 +1,18 @@
 #pragma once
 
+#include <bitset>
+#include <algorithm>
+#include <functional>
+
 #include "Graphics.h"
 #include "Mouse.h"
 #include "Keyboard.h"
 #include "Utils.h"
+#include "Image.h"
+#include "QuadTree.h"
+#include "Geometry.h"
+#include "Random.h"
+#include "Camera.h"
 
 class Game
 {
@@ -26,6 +35,5 @@ private:
 	Keyboard kbd;
 	bool m_IsRunning;
 
-	Surface img;
-	//CTimer timer;
+	CTimer timer;
 };

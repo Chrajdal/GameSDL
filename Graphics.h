@@ -7,36 +7,7 @@
 #include <iostream>
 
 #include "Color.h"
-
-//class Surface
-//{
-//public:
-//	Surface(void)
-//		: m_data(NULL)
-//	{}
-//	~Surface(void)
-//	{
-//		if (m_data != NULL)
-//			SDL_FreeSurface(m_data);
-//	}
-//
-//	void LoadData(const std::string & file_name)
-//	{
-//		m_data = IMG_Load(file_name.c_str());
-//		if (m_data == NULL)
-//		{
-//			std::cout << "IMG_Load failed: " << std::endl;
-//			SDL_Log("IMG_Load failed: %s", SDL_GetError());
-//		}
-//	}
-//
-//	SDL_Surface * GetData(void)const
-//	{
-//		return m_data;
-//	}
-//
-//	SDL_Surface * m_data;
-//};
+#include "Image.h"
 
 class Graphics
 {
@@ -51,11 +22,15 @@ public:
 	void DrawLine(unsigned x1, unsigned y1, unsigned x2, unsigned y2, const Color & color);
 	void DrawCircle(int _x, int _y, int radius, const Color & c);
 
-	void DrawImage(int x, int y, SDL_Surface * srf);
+	void DrawImage(int x, int y, const Image & img);
+	void DrawPartImage(int x, int y, int fromx, int fromy, int width, int height, const Image & img);
 
-	unsigned int ScreenHeight;
-	unsigned int ScreenWidth;
+	inline unsigned width(void) { return ScreenWidth; }
+	inline unsigned height(void){ return ScreenHeight; }	
 private:
 	SDL_Window * wnd;
 	SDL_Renderer * ren;
+
+	unsigned int ScreenWidth;
+	unsigned int ScreenHeight;
 };

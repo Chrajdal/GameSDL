@@ -95,17 +95,40 @@ void Graphics::DrawCircle(int _x, int _y, int radius, const Color & c)
 	}
 }
 
-void Graphics::DrawImage(int x, int y, SDL_Surface * srf)
+void Graphics::DrawImage(int x, int y, const Image & img)
 {
-	if (srf == NULL)
+	if (img.GetData() == NULL)
 		return;
 
 	SDL_Rect pos;
 	pos.x = x;
 	pos.y = y;
-	pos.w = srf->w;
-	pos.h = srf->h;
+	pos.w = img.GetData()->w;
+	pos.h = img.GetData()->h;
 
-	SDL_Texture * texture = SDL_CreateTextureFromSurface(ren, srf);
+	SDL_Texture * texture = SDL_CreateTextureFromSurface(ren, img.GetData());
 	SDL_RenderCopy(ren, texture, NULL, &pos);
+}
+
+void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int height, const Image & img)
+{
+	if (img.GetData() == NULL)
+		return;
+
+	SDL_Rect pos;
+	pos.x = x;
+	pos.y = y;
+	//pos.w = img.GetData()->w;
+	//pos.h = img.GetData()->h;
+	pos.w = width;
+	pos.h = height;
+
+	SDL_Rect src;
+	src.x = fromx;
+	src.y = fromy;
+	src.w = width;
+	src.h = height;
+
+	SDL_Texture * texture = SDL_CreateTextureFromSurface(ren, img.GetData());
+	SDL_RenderCopy(ren, texture, &src, &pos);
 }

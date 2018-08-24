@@ -136,20 +136,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mouse.cpp" />
-    <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="Node.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
+    <ClCompile Include="Random.cpp" />
+    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Geometry.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
-    <ClInclude Include="Surface.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="QuadTree.h" />
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="Image.h" />
+    <ClInclude Include="Tile.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

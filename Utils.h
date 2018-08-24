@@ -19,7 +19,7 @@ struct Tpoint
 		: m_x(src.m_x), m_y(src.m_y)
 	{}
 	Tpoint(const Tpoint<T> && src)
-		: m_x(move(src.m_x)), m_y(move(src.m_y))
+		: m_x(std::move(src.m_x)), m_y(std::move(src.m_y))
 	{}
 	Tpoint<T> & operator = (const Tpoint<T> & src)
 	{
@@ -66,7 +66,7 @@ struct Trect
 		: m_upleft(src.m_upleft), m_downright(src.m_downright)
 	{}
 	Trect(const Trect<T> && src)
-		: m_upleft(move(src.m_upleft)), m_downright(move(src.m_downright))
+		: m_upleft(std::move(src.m_upleft)), m_downright(std::move(src.m_downright))
 	{}
 	Trect<T> & operator = (const Trect<T> & src)
 	{
@@ -84,7 +84,7 @@ struct Trect
 		m_downright = move(src.m_downright);
 		return *this;
 	}
-	bool contains(const T & x, const T & y)
+	bool contains(const T & x, const T & y) const
 	{
 		return !(x < m_upleft.m_x || x >= m_downright.m_x ||
 			y < m_upleft.m_y || y >= m_downright.m_y);
@@ -96,6 +96,15 @@ struct Trect
 		if (m_downright.m_y < rhs.m_upleft.m_y || m_upleft.m_y > rhs.m_downright.m_y) return false;
 
 		return true;
+	}
+
+	T Width(void)const
+	{
+		return fabs(m_downright.m_x - m_upleft.m_x);
+	}
+	T Height(void)const
+	{
+		return fabs(m_downright.m_y - m_upleft.m_y);
 	}
 
 	Tpoint<T> m_upleft;

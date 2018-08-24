@@ -3,14 +3,14 @@
 #include <SDL_image.h>
 #include <string>
 
-class Surface
+class Image
 {
 public:
-	Surface(void);
-	~Surface(void);
+	Image(void);
+	~Image(void);
 
 	void LoadData(const std::string & file_name);
-	SDL_Surface * GetData(void)const;
+	SDL_Texture * GetData(void)const;
 private:
-	SDL_Surface * m_data;
+	SDL_Texture * m_data;
 };
