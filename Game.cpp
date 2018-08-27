@@ -140,58 +140,26 @@ void Game::Go()
 
 void Game::HandleInput()
 {
-	SDL_Event e;
-	if (SDL_PollEvent(&e))
-	{
-	}
+	kbd.PollEvent();
 	
-	const Uint8* keystate = SDL_GetKeyboardState(NULL);
-	//continuous-response keys
-	if (keystate != NULL)
+	if (kbd.KeyIsPressed(SDL_SCANCODE_UP))
 	{
-		if (keystate[SDL_SCANCODE_ESCAPE])
-		{
-			m_IsRunning = false;
-			return;
-		}
-		if (keystate[SDL_SCANCODE_LEFT])
-		{
-			cam.m_x -= 1e1;
-		}
-		if (keystate[SDL_SCANCODE_RIGHT])
-		{
-			cam.m_x += 1e1;
-		}
-		if (keystate[SDL_SCANCODE_UP])
-		{
-			cam.m_y -= 1e1;
-		}
-		if (keystate[SDL_SCANCODE_DOWN])
-		{
-			cam.m_y += 1e1;
-		}
+		cam.m_y -= 1e1;
 	}
-	
+	if (kbd.KeyIsPressed(SDL_SCANCODE_DOWN))
+	{
+		cam.m_y += 1e1;
+	}
+	if (kbd.KeyIsPressed(SDL_SCANCODE_LEFT))
+	{
+		cam.m_x -= 1e1;
+	}
+	if (kbd.KeyIsPressed(SDL_SCANCODE_RIGHT))
+	{
+		cam.m_x += 1e1;
+	}
 
-	//SDL_Event e;
-	//if (SDL_PollEvent(&e))
-	//{
-	//	
-	//	switch(e.type)
-	//	{
-	//	case SDL_KEYDOWN:
-	//		switch (e.key.keysym.sym)
-	//		{
-	//		case SDLK_ESCAPE: m_IsRunning = false; break;
-	//
-	//		//case SDLK_UP:    cam.m_y -= 1e1; break;
-	//		//case SDLK_DOWN:  cam.m_y += 1e1; break;
-	//		//case SDLK_LEFT:  cam.m_x -= 1e1; break;
-	//		//case SDLK_RIGHT: cam.m_x += 1e1; break;
-	//		}
-	//	break;
-	//	}
-	//}
+
 }
 
 void Game::UpdateModel()
