@@ -60,8 +60,31 @@ constexpr int tile_size = 16;
 tile_type selected_tile = tile_type::dirt;
 Player player(player_img);
 
+v2d screen_to_world(double x, double y, const Camera & cam)
+{
+	v2d res;
+	res.x = (x + cam.m_x) / tile_size;
+	res.y = (y + cam.m_y) / tile_size;
+	return res;
+}
+
+v2d world_to_screen(double x, double y, const Camera & cam)
+{
+	v2d res;
+	res.x = (x + cam.m_x) * tile_size;
+	res.y = (y + cam.m_y) * tile_size;
+	return res;
+}
+
+void load_from_file(void)
+{
+	terrain.LoadFromFile(".\\Save\\save_file.txt");
+}
+
 Game::Game()
 {
+	auto load_big_file_handle = std::async(std::launch::async, load_from_file);
+
 	m_IsRunning = true;
 	gfx.BeginFrame();
 	gfx.EndFrame();
@@ -75,73 +98,75 @@ Game::Game()
 		return;
 	}
 	
-	for (int i = 0; i < tile_sheet_dirt.m_width / tile_size; ++i)
+	for (int i = 0; i < (tile_sheet_dirt.m_width / tile_size); ++i)
 	{
-		for (int j = 0; j < tile_sheet_dirt.m_height / tile_size; ++j)
+		for (int j = 0; j < (tile_sheet_dirt.m_height / tile_size); ++j)
 		{
-			Trect<int> res{ {i * tile_size, j * tile_size}, { i * tile_size + tile_size,j * tile_size + tile_size } };
-			//res.x = i * tile_size;
-			//res.y = j * tile_size;
-			//res.w = tile_size;
-			//res.h = tile_size;
+			Trect<int> res{ {i * tile_size, j * tile_size}, { (i + 1) * tile_size, (j + 1) * tile_size} };
 			tile_map_rects.push_back(res);
 		}
 	}
 
-
-	int tmp = -200;
-	for (int i = (int)((tmp + 0 + cam.m_x) / tile_size); i < (int)((1024 + cam.m_x - tmp) / tile_size); ++i)
-	{
-		for (int j = (int)((tmp + 0 + cam.m_y) / tile_size); j < (int)((1024 + cam.m_y - tmp) / tile_size); ++j)
-		{
-			double height_treshold = perlin::noise(/*i * dx * 0.1, */ perlin::noise(i * dx * 0.05)) * 100;
-			double stone_threshold = perlin::noise(j * dx * 0.1) * 200;
-			int x = i;
-			int y = j;
-			if (height_treshold > j)
-			{
-				terrain.insert(Node(x, y, tile_type::air));
-			}
-			else if (height_treshold <= j && height_treshold > j - stone_threshold)
-			{
-				terrain.insert(Node(x, y, tile_type::dirt));
-			}
-			else if (height_treshold <= j - stone_threshold)
-			{
-				double noise = perlin::noise(i * dx, j * dy);
-				if (noise > 0.0)
-					terrain.insert(Node(x, y, tile_type::dirt));
-				else
-					terrain.insert(Node(x, y, tile_type::stone));
-			}
-		}
-	}
-
-
-
-
+	//int tmp = -200;
+	//for (int i = (int)((tmp + 0 + cam.m_x) / tile_size); i < (int)((1024 + cam.m_x - tmp) / tile_size); ++i)
+	//{
+	//	for (int j = (int)((tmp + 0 + cam.m_y) / tile_size); j < (int)((1024 + cam.m_y - tmp) / tile_size); ++j)
+	//	{
+	//		double height_treshold = perlin::noise(/*i * dx * 0.1, */ perlin::noise(i * dx * 0.05)) * 100;
+	//		double stone_threshold = perlin::noise(j * dx * 0.1) * 200;
+	//		int x = i;
+	//		int y = j;
+	//		if (height_treshold > j)
+	//		{
+	//			terrain.insert(Node(x, y, tile_type::air));
+	//		}
+	//		else if (height_treshold <= j && height_treshold > j - stone_threshold)
+	//		{
+	//			terrain.insert(Node(x, y, tile_type::dirt));
+	//		}
+	//		else if (height_treshold <= j - stone_threshold)
+	//		{
+	//			double noise = perlin::noise(i * dx, j * dy);
+	//			if (noise > 0.0)
+	//				terrain.insert(Node(x, y, tile_type::dirt));
+	//			else
+	//				terrain.insert(Node(x, y, tile_type::stone));
+	//		}
+	//	}
+	//}
+	
+	load_big_file_handle.get();
 }
 
 Game::~Game(void)
 {
-	
+	terrain.SaveToFile(".\\Save\\save_file.txt");
 }
 
 void Game::Go()
 {
 	gfx.BeginFrame();
 
-	HandleInput();
-	UpdateModel();
-	ComposeFrame();
+	if(m_IsRunning) HandleInput();
+	if(m_IsRunning) UpdateModel();
+	if(m_IsRunning) ComposeFrame();
 
 	gfx.EndFrame();
 }
 
+bool mouseArray[3] = { 0,0,0 };
+
 void Game::HandleInput()
 {
-	kbd.PollEvent();
-	
+	SDL_Event e;
+	SDL_PollEvent(&e);
+	mouse.SetMouseState(e);
+
+	if (kbd.KeyIsPressed(SDL_SCANCODE_ESCAPE))
+	{
+		m_IsRunning = false;
+		return;
+	}
 	if (kbd.KeyIsPressed(SDL_SCANCODE_UP))
 	{
 		cam.m_y -= 1e1;
@@ -159,7 +184,32 @@ void Game::HandleInput()
 		cam.m_x += 1e1;
 	}
 
+	if (kbd.KeyIsPressed(SDL_SCANCODE_1))
+	{
+		selected_tile = tile_type::dirt;
+	}
+	if (kbd.KeyIsPressed(SDL_SCANCODE_2))
+	{
+		selected_tile = tile_type::stone;
+	}
 
+	// mouse code
+	{
+		int x = mouse.GetX();
+		int y = mouse.GetY();
+
+		v2d world_pos = screen_to_world(x, y, cam);
+		Node * tmp = terrain.access(int(world_pos.x), int(world_pos.y)); // instead of floor it is possible to use overtyping to int
+		if (mouse.LeftIsPressed())
+		{
+			tmp->m_tile = tile_type::air;
+		}
+		if (mouse.RightIsPressed())
+		{
+			if (tmp->m_tile == tile_type::air)
+				tmp->m_tile = selected_tile;
+		}
+	}
 }
 
 void Game::UpdateModel()
@@ -195,40 +245,45 @@ void Game::UpdateModel()
 
 Trect<int> const & pick_correct_tile_rect(int x, int y, const QuadTree & terrain)
 {
-	std::vector<const Node *> up = terrain.range(Trect<double>(Tpoint<double>(x - 0.5, y - 1.0 - 0.5), Tpoint<double>(x + 0.5, y - 1.0 + 0.5)));
-	std::vector<const Node *> dw = terrain.range(Trect<double>(Tpoint<double>(x - 0.5, y + 1.0 - 0.5), Tpoint<double>(x + 0.5, y + 1.0 + 0.5)));
-	std::vector<const Node *> lf = terrain.range(Trect<double>(Tpoint<double>(x - 1.0 - 0.5, y - 0.5), Tpoint<double>(x - 1.0 + 0.5, y + 0.5)));
-	std::vector<const Node *> rt = terrain.range(Trect<double>(Tpoint<double>(x + 1.0 - 0.5, y - 0.5), Tpoint<double>(x + 1.0 + 0.5, y + 0.5)));
+	//std::vector<const Node *> up = terrain.range(Trect<double>(Tpoint<double>(x - 0.5, y - 1.0 - 0.5), Tpoint<double>(x + 0.5, y - 1.0 + 0.5)));
+	//std::vector<const Node *> dw = terrain.range(Trect<double>(Tpoint<double>(x - 0.5, y + 1.0 - 0.5), Tpoint<double>(x + 0.5, y + 1.0 + 0.5)));
+	//std::vector<const Node *> lf = terrain.range(Trect<double>(Tpoint<double>(x - 1.0 - 0.5, y - 0.5), Tpoint<double>(x - 1.0 + 0.5, y + 0.5)));
+	//std::vector<const Node *> rt = terrain.range(Trect<double>(Tpoint<double>(x + 1.0 - 0.5, y - 0.5), Tpoint<double>(x + 1.0 + 0.5, y + 0.5)));
+	double eps = 1e-10;
+	std::vector<const Node *> up = terrain.range(Trect<double>(Tpoint<double>(x - eps, y - 1.0 - eps), Tpoint<double>(x + eps, y - 1.0 + eps)));
+	std::vector<const Node *> dw = terrain.range(Trect<double>(Tpoint<double>(x - eps, y + 1.0 - eps), Tpoint<double>(x + eps, y + 1.0 + eps)));
+	std::vector<const Node *> lf = terrain.range(Trect<double>(Tpoint<double>(x - 1.0 - eps, y - eps), Tpoint<double>(x - 1.0 + eps, y + eps)));
+	std::vector<const Node *> rt = terrain.range(Trect<double>(Tpoint<double>(x + 1.0 - eps, y - eps), Tpoint<double>(x + 1.0 + eps, y + eps)));
 	if (!up.empty() && !dw.empty() && !lf.empty() && !rt.empty())
 	{
 		std::bitset<4> draw_flag;
-		draw_flag[0] = bool(up[0]->m_tile != tile_type::air);
-		draw_flag[1] = bool(dw[0]->m_tile != tile_type::air);
-		draw_flag[2] = bool(lf[0]->m_tile != tile_type::air);
-		draw_flag[3] = bool(rt[0]->m_tile != tile_type::air);
+		draw_flag[3] = bool(up[0]->m_tile != tile_type::air);
+		draw_flag[2] = bool(dw[0]->m_tile != tile_type::air);
+		draw_flag[1] = bool(lf[0]->m_tile != tile_type::air);
+		draw_flag[0] = bool(rt[0]->m_tile != tile_type::air);
 		uint8_t flag = (uint8_t)draw_flag.to_ulong();
 
 		switch (flag)
 		{
-		case 0:  return tile_map_rects[15];
-		case 1:  return tile_map_rects[12];
-		case 2:  return tile_map_rects[14];
-		case 3:  return tile_map_rects[13];
-		case 4:  return tile_map_rects[3];
-		case 5:  return tile_map_rects[0];
-		case 6:  return tile_map_rects[2];
-		case 7:  return tile_map_rects[1];
-		case 8:  return tile_map_rects[11];
-		case 9:  return tile_map_rects[8];
+		case 0:  return tile_map_rects[0];
+		case 1:  return tile_map_rects[1];
+		case 2:  return tile_map_rects[2];
+		case 3:  return tile_map_rects[3];
+		case 4:  return tile_map_rects[4];
+		case 5:  return tile_map_rects[5];
+		case 6:  return tile_map_rects[6];
+		case 7:  return tile_map_rects[7];
+		case 8:  return tile_map_rects[8];
+		case 9:  return tile_map_rects[9];
 		case 10: return tile_map_rects[10];
-		case 11: return tile_map_rects[9];
-		case 12: return tile_map_rects[7];
-		case 13: return tile_map_rects[4];
-		case 14: return tile_map_rects[6];
-		case 15: return tile_map_rects[5];
+		case 11: return tile_map_rects[11];
+		case 12: return tile_map_rects[12];
+		case 13: return tile_map_rects[13];
+		case 14: return tile_map_rects[14];
+		case 15: return tile_map_rects[15];
 		}
 	}
-	return tile_map_rects[0];
+	//return tile_map_rects[0];
 }
 
 void Game::ComposeFrame()
@@ -279,5 +334,4 @@ void Game::ComposeFrame()
 	//gfx.draw_rect((int)Graphics::ScreenWidth - tile_size, 0, (int)tile_size, Graphics::ScreenHeight, Colors::White);
 	//gfx.draw_rect(0, 0, Graphics::ScreenWidth, (int)tile_size, Colors::White);
 	//gfx.draw_rect(0, (int)Graphics::ScreenHeight - tile_size, Graphics::ScreenWidth, (int)tile_size, Colors::White);
-	
 }

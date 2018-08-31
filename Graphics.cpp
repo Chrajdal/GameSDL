@@ -69,8 +69,8 @@ Graphics::Graphics(void)
 	ScreenHeight = dm.h;
 	ScreenWidth = dm.w;
 
-	ScreenHeight = 512 + 256;
-	ScreenWidth = 512 + 256;
+	//ScreenHeight = 512 + 256;
+	//ScreenWidth = 512 + 256;
 
 	wnd = SDL_CreateWindow(
 		"The Game",
@@ -87,10 +87,10 @@ Graphics::Graphics(void)
 		SDL_Log("SDL_CreateRenderer failed: %s", SDL_GetError());
 
 	// Toggle Fullscreen
-	//Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
-	//bool IsFullscreen = SDL_GetWindowFlags(wnd) & FullscreenFlag;
-	//SDL_SetWindowFullscreen(wnd, IsFullscreen ? 0 : FullscreenFlag);
-	//SDL_ShowCursor(IsFullscreen);
+	Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
+	bool IsFullscreen = SDL_GetWindowFlags(wnd) & FullscreenFlag;
+	SDL_SetWindowFullscreen(wnd, IsFullscreen ? 0 : FullscreenFlag);
+	SDL_ShowCursor(SDL_ENABLE);
 }
 
 Graphics::~Graphics(void)

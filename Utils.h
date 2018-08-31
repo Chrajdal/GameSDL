@@ -100,11 +100,11 @@ struct Trect
 
 	T Width(void)const
 	{
-		return fabs(m_downright.m_x - m_upleft.m_x);
+		return (T)fabs(m_downright.m_x - m_upleft.m_x);
 	}
 	T Height(void)const
 	{
-		return fabs(m_downright.m_y - m_upleft.m_y);
+		return (T)fabs(m_downright.m_y - m_upleft.m_y);
 	}
 
 	Tpoint<T> m_upleft;

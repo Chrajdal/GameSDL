@@ -3,6 +3,10 @@
 #include <bitset>
 #include <algorithm>
 #include <functional>
+#include <thread>
+#include <mutex>
+#include <future>
+#include <fstream>
 
 #include "Camera.h"
 #include "Graphics.h"

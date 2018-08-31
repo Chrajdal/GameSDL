@@ -5,8 +5,8 @@
 class Keyboard
 {
 public:
-	Keyboard() {}
-	~Keyboard() {}
+	Keyboard();
+	~Keyboard();
 
 	bool PollEvent(void);
 	bool KeyIsPressed(const SDL_Scancode & scan_code);
