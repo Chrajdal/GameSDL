@@ -101,7 +101,7 @@ Graphics::~Graphics(void)
 
 void Graphics::BeginFrame(void)
 {
-	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(ren, 0x80, 0xc8, 0xff, 255);
 	SDL_RenderClear(ren);
 }
 

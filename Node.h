@@ -19,7 +19,7 @@ public:
 
 	bool insert(const Node & n);
 	void range(std::vector<const Node *> & PointsInRange, const Trect<double> & range) const;
-	const Node * at(int x, int y, const Node * n) const;
+	const Node * at(int x, int y) const;
 	Node * access(int x, int y);
 
 	friend std::ostream & operator << (std::ostream & os, const Node & src)

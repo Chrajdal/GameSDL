@@ -40,10 +40,7 @@ const Node * QuadTree::at(int x, int y) const
 	if (m_root == NULL)
 		return NULL;
 	else
-	{
-		const Node * n = NULL;
-		return m_root->at(x, y, n);
-	}
+		return m_root->at(x, y);
 }
 
 Node * QuadTree::access(int x, int y)
