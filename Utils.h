@@ -33,8 +33,8 @@ struct Tpoint
 	{
 		if (this == &src)
 			return *this;
-		m_x = move(src.m_x);
-		m_y = move(src.m_y);
+		m_x = std::move(src.m_x);
+		m_y = std::move(src.m_y);
 		return *this;
 	}
 	inline bool operator == (const Tpoint<T> & rhs) const
@@ -80,8 +80,8 @@ struct Trect
 	{
 		if (this == &src)
 			return *this;
-		m_upleft = move(src.m_upleft);
-		m_downright = move(src.m_downright);
+		m_upleft = std::move(src.m_upleft);
+		m_downright = std::move(src.m_downright);
 		return *this;
 	}
 	bool contains(const T & x, const T & y) const

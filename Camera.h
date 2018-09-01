@@ -1,14 +1,15 @@
 #pragma once
 
 #include "Graphics.h"
+#include "Geometry.h"
 
 class Camera
 {
 public:
 	Camera(void)
 	{
-		m_x = 0;
-		m_y = 0;
+		pos.x = 0;
+		pos.y = 0;
 		
 		SDL_DisplayMode dm;
 		if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
@@ -19,8 +20,7 @@ public:
 	}
 
 public:
-	double m_x; // current position of the camera
-	double m_y; // current position of the camera
+	v2d pos; // current position of the camera
 private:
 	int m_width;  // viewport size = Graphics::ScreenWidth
 	int m_height; // viewport size = Graphics::ScreenHeight

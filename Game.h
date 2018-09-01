@@ -16,7 +16,7 @@
 #include "QuadTree.h"
 #include "Geometry.h"
 #include "Random.h"
-
+#include "Player.h"
 
 class Game
 {

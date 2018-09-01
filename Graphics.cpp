@@ -187,3 +187,11 @@ void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int 
 
 	SDL_RenderCopy(ren, img.GetData(), &src, &pos);
 }
+
+void Graphics::DrawRect(int x, int y, int w, int h, const Color & color)
+{
+	DrawLine(x, y, x + w, y, color);
+	DrawLine(x+w, y, x + w, y+h, color);
+	DrawLine(x, y, x, y + h, color);
+	DrawLine(x, y+h, x + w, y+h, color);
+}

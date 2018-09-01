@@ -156,6 +156,7 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Tile.h" />

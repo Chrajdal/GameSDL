@@ -1,79 +1,29 @@
 #include "Game.h"
 
-class Player
-{
-public:
-	Player(const Image & bmp)
-		:
-		//player_sprite(&bmp, 0, 0, bmp.width, bmp.height),
-		m_curr_state(PlayerState::stand)
-	{
-		pos.x = 0.0;
-		pos.y = 0.0;
-
-		vel.x = 0.0;
-		vel.y = 0.0;
-	}
-	void Update()
-	{
-		switch (m_curr_state)
-		{
-		case PlayerState::stand:
-			break;
-		case PlayerState::walk:
-			break;
-		case PlayerState::jump:
-			break;
-		case PlayerState::attack:
-			break;
-		}
-	}
-
-	enum PlayerState
-	{
-		stand,
-		walk,
-		jump,
-		attack
-	};
-
-	v2d pos;
-	v2d vel;
-	Image player_sprite;
-	PlayerState m_curr_state;
-	Trect<double> m_bounding_box;
-};
-
-
 QuadTree terrain;
 Image tile_sheet_dirt;
 Image tile_sheet_stone;
 std::vector<Trect<int>> tile_map_rects;
 Image player_img;
-Random rnd;
-double dx = 1e-1;
-double dy = 1e-1;
-int framecount = 0;
-double time_concatenated = 0.0;
-constexpr double dmax = std::numeric_limits<double>::max();
-constexpr double dmin = std::numeric_limits<double>::lowest();
+
 constexpr int tile_size = 16;
 tile_type selected_tile = tile_type::dirt;
-Player player(player_img);
+Player player(&player_img);
+bool player_has_been_placed = false;
 
 v2d screen_to_world(double x, double y, const Camera & cam)
 {
 	v2d res;
-	res.x = (x + cam.m_x) / tile_size;
-	res.y = (y + cam.m_y) / tile_size;
+	res.x = (x + cam.pos.x) / tile_size;
+	res.y = (y + cam.pos.y) / tile_size;
 	return res;
 }
 
 v2d world_to_screen(double x, double y, const Camera & cam)
 {
 	v2d res;
-	res.x = (x + cam.m_x) * tile_size;
-	res.y = (y + cam.m_y) * tile_size;
+	res.x = (x)* tile_size + cam.pos.x;
+	res.y = (y)* tile_size + cam.pos.y;
 	return res;
 }
 
@@ -92,6 +42,9 @@ Game::Game()
 	
 	tile_sheet_dirt.LoadData(gfx, "./Assets/grass tile sheet.png");
 	tile_sheet_stone.LoadData(gfx, "./Assets/stone tile sheet.png");
+	player_img.LoadData(gfx, "./Assets/Main Character.png");
+	player.m_bounding_box = { { 0,0 }, {player_img.m_width, player_img.m_height} };
+
 	if (tile_sheet_dirt.GetData() == NULL || tile_sheet_stone.GetData() == NULL)
 	{
 		m_IsRunning = false;
@@ -106,6 +59,9 @@ Game::Game()
 			tile_map_rects.push_back(res);
 		}
 	}
+
+	cam.pos.x = player.pos.x - gfx.ScreenWidth / 2;
+	cam.pos.y = player.pos.y - gfx.ScreenHeight / 2;
 
 	load_big_file_handle.get();
 }
@@ -126,8 +82,6 @@ void Game::Go()
 	gfx.EndFrame();
 }
 
-bool mouseArray[3] = { 0,0,0 };
-
 void Game::HandleInput()
 {
 	SDL_Event e;
@@ -139,21 +93,39 @@ void Game::HandleInput()
 		m_IsRunning = false;
 		return;
 	}
+	if (kbd.KeyIsPressed(SDL_SCANCODE_DELETE))
+	{
+		terrain.clear();
+	}
+
+	double step = 6e-1; // will be changed to player.vel;
 	if (kbd.KeyIsPressed(SDL_SCANCODE_UP) || kbd.KeyIsPressed(SDL_SCANCODE_W))
 	{
-		cam.m_y -= 1e1;
+		//player.pos.y -= step;
+		//cam.pos.y -= step*tile_size;
+
+		player.vel.y = -step;
 	}
 	if (kbd.KeyIsPressed(SDL_SCANCODE_DOWN) || kbd.KeyIsPressed(SDL_SCANCODE_S))
 	{
-		cam.m_y += 1e1;
+		//player.pos.y += step;
+		//cam.pos.y += step * tile_size;
+
+		player.vel.y = +step;
 	}
 	if (kbd.KeyIsPressed(SDL_SCANCODE_LEFT) || kbd.KeyIsPressed(SDL_SCANCODE_A))
 	{
-		cam.m_x -= 1e1;
+		//player.pos.x -= step;
+		//cam.pos.x -= step * tile_size;
+
+		player.vel.x = -step;
 	}
 	if (kbd.KeyIsPressed(SDL_SCANCODE_RIGHT) || kbd.KeyIsPressed(SDL_SCANCODE_D))
 	{
-		cam.m_x += 1e1;
+		//player.pos.x += step;
+		//cam.pos.x += step * tile_size;
+
+		player.vel.x = +step;
 	}
 
 	if (kbd.KeyIsPressed(SDL_SCANCODE_1))
@@ -172,6 +144,11 @@ void Game::HandleInput()
 
 		v2d world_pos = screen_to_world(x, y, cam);
 		Node * tmp = terrain.access((int)std::floor(world_pos.x), (int)std::floor(world_pos.y)); // instead of floor it is possible to use overtyping to int
+		if (tmp == NULL)
+		{
+			std::cout << "ERROR" << std::endl;
+			return;
+		}
 		if (mouse.LeftIsPressed())
 		{
 			tmp->m_tile = tile_type::air;
@@ -182,16 +159,24 @@ void Game::HandleInput()
 				tmp->m_tile = selected_tile;
 		}
 	}
+
+	cam.pos.x = player.pos.x * tile_size + player.m_bounding_box.Width() / 2 - gfx.ScreenWidth / 2;
+	cam.pos.y = player.pos.y * tile_size + player.m_bounding_box.Height() / 2 - gfx.ScreenHeight / 2;
+
+	SDL_FlushEvents(-123456, 123456);
 }
 
 void Game::UpdateModel()
 {
+	// terrain generation:
+	double dx = 1e-1;
+	double dy = 1e-1;
 	int tmp = -200;
-	for (int i = (int)((tmp + 0 + cam.m_x) / tile_size); i < (int)((gfx.width() + cam.m_x - tmp) / tile_size); ++i)
+	for (int i = (int)((tmp + 0 + cam.pos.x) / tile_size); i < (int)((gfx.width() + cam.pos.x - tmp) / tile_size); ++i)
 	{
-		for (int j = (int)((tmp + 0 + cam.m_y) / tile_size); j < (int)((gfx.height() + cam.m_y - tmp) / tile_size); ++j)
+		for (int j = (int)((tmp + 0 + cam.pos.y) / tile_size); j < (int)((gfx.height() + cam.pos.y - tmp) / tile_size); ++j)
 		{
-			double height_treshold = perlin::noise(/*i * dx * 0.1, */ perlin::noise(i * dx * 0.05)) * 100;
+			double height_treshold = perlin::noise(perlin::noise(i * dx * 0.05)) * 100;
 			double stone_threshold = perlin::noise(j * dx * 0.1) * 200;
 			int x = i;
 			int y = j;
@@ -213,6 +198,24 @@ void Game::UpdateModel()
 			}
 		}
 	}
+
+	//position the player accordingly:
+	if (player_has_been_placed == false)
+	{
+		//move the player up - so that he stands on the ground
+		player.pos.x = 0;
+		const Node * standing_on = terrain.at(int(std::round(player.pos.x)), int(std::round(player.pos.y)));
+		while (standing_on != NULL && standing_on->m_tile != tile_type::air)
+		{
+			player.pos.y--;
+			//std::cout << "Moving player up" << std::endl;
+			standing_on = terrain.at(int(std::round(player.pos.x)), int(std::round(player.pos.y)));
+		}
+		player_has_been_placed = true;
+	}
+
+	player.pos += player.vel;
+	player.vel *= 0.7;
 }
 
 Trect<int> const & pick_correct_tile_rect(int x, int y, const QuadTree & terrain)
@@ -258,8 +261,8 @@ void Game::ComposeFrame()
 {
 	// offset view by cam
 	Trect<double> view(
-		{ 0 + cam.m_x - tile_size,0 + cam.m_y - tile_size },
-		{ gfx.width() + cam.m_x + tile_size, gfx.height() + cam.m_y + tile_size });
+		{ 0 + cam.pos.x - tile_size,0 + cam.pos.y - tile_size },
+		{ gfx.width() + cam.pos.x + tile_size, gfx.height() + cam.pos.y + tile_size });
 
 	// scale view to pick up only tile_size'th od the pixels
 	view.m_upleft.m_x /= tile_size;
@@ -271,8 +274,8 @@ void Game::ComposeFrame()
 
 	for (const auto & i : vec)
 	{
-		int x = (int)(i->m_x * tile_size - cam.m_x);
-		int y = (int)(i->m_y * tile_size - cam.m_y);
+		int x = (int)(i->m_x * tile_size - std::round(cam.pos.x));
+		int y = (int)(i->m_y * tile_size - std::round(cam.pos.y));
 	
 		if (x >= 0 - tile_size && x + tile_size < (int)gfx.width()  + tile_size &&
 			y >= 0 - tile_size && y + tile_size < (int)gfx.height() + tile_size)
@@ -289,17 +292,28 @@ void Game::ComposeFrame()
 			}
 		}
 	}
-	
-	//v2d tmp;
-	//tmp.x = player.m_x;
-	//tmp.y = player.m_y;
-	//v2d player_pos = world_to_screen(tmp.x, tmp.y, cam);
-	//gfx.draw_surface_alpha((int)player_pos.x, (int)player_pos.y, player.player_sprite, Colors::White);
 
-	// easy way out:
-	// todo gfx.draw_part_of_surface
-	//gfx.draw_rect(0, 0, (int)tile_size, Graphics::ScreenHeight, Colors::White);
-	//gfx.draw_rect((int)Graphics::ScreenWidth - tile_size, 0, (int)tile_size, Graphics::ScreenHeight, Colors::White);
-	//gfx.draw_rect(0, 0, Graphics::ScreenWidth, (int)tile_size, Colors::White);
-	//gfx.draw_rect(0, (int)Graphics::ScreenHeight - tile_size, Graphics::ScreenWidth, (int)tile_size, Colors::White);
+	v2d player_pos;// = world_to_screen(player.pos.x, player.pos.y, cam);
+
+	player_pos.x = player.pos.x * tile_size - std::round(cam.pos.x);
+	player_pos.y = player.pos.y * tile_size - std::round(cam.pos.y);
+
+
+	gfx.DrawImage((int)player_pos.x, (int)player_pos.y, *player.player_img);
+
+	// bounding box
+	//gfx.DrawRect(
+	//	(int)player_pos.x + player.m_bounding_box.m_upleft.m_x,
+	//	(int)player_pos.y + player.m_bounding_box.m_upleft.m_y,
+	//	player.m_bounding_box.Width(),
+	//	player.m_bounding_box.Height(), Colors::Blue);
+
+	//std::cout << "Play pos: " << player_pos.x << ", " << player_pos.y << '\n';
+	//std::cout << "real pos: " << player.pos.x << ", " << player.pos.y << '\n';
+
+
+	/**/
+	//gfx.DrawLine(0, 0, gfx.ScreenWidth - 1, gfx.ScreenHeight - 1, Colors::Red);
+	//gfx.DrawLine(gfx.ScreenWidth - 1, 0, 0, gfx.ScreenHeight - 1, Colors::Red);
+	/**/
 }
