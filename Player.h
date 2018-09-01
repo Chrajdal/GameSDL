@@ -1,37 +1,19 @@
 #pragma once
 
+#include "Moveable.h"
 #include "Graphics.h"
 #include "Geometry.h"
+#include "QuadTree.h"
 #include "Utils.h"
 
-class Player
+
+class Player : public Moveable // todo: class Player : private Moveable
 {
 public:
-	Player(Image * img)
-		:
-		player_img(img),
-		m_curr_state(PlayerState::idle)
-	{
-		pos.x = 0.0;
-		pos.y = 0.0;
+	Player(Image * img);
+	~Player();
 
-		vel.x = 0.0;
-		vel.y = 0.0;
-	}
-	void Update()
-	{
-		switch (m_curr_state)
-		{
-		case PlayerState::idle:
-			break;
-		case PlayerState::walk:
-			break;
-		case PlayerState::jump:
-			break;
-		case PlayerState::attack:
-			break;
-		}
-	}
+	void Update(const QuadTree & terrain);
 
 	enum PlayerState
 	{
@@ -41,9 +23,9 @@ public:
 		attack
 	};
 
-	v2d pos;
-	v2d vel;
-	Image * player_img;
+	//v2d m_pos;
+	//v2d m_vel;
+	Image * m_player_img;
 	PlayerState m_curr_state;
 	Trect<int> m_bounding_box;
 };

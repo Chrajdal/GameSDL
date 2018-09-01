@@ -69,8 +69,8 @@ Graphics::Graphics(void)
 	ScreenHeight = dm.h;
 	ScreenWidth = dm.w;
 
-	//ScreenHeight = 512 + 256;
-	//ScreenWidth = 512 + 256;
+	ScreenHeight = 512 + 256;
+	ScreenWidth = 512 + 256;
 
 	wnd = SDL_CreateWindow(
 		"The Game",
@@ -87,10 +87,10 @@ Graphics::Graphics(void)
 		SDL_Log("SDL_CreateRenderer failed: %s", SDL_GetError());
 
 	// Toggle Fullscreen
-	Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
-	bool IsFullscreen = SDL_GetWindowFlags(wnd) & FullscreenFlag;
-	SDL_SetWindowFullscreen(wnd, IsFullscreen ? 0 : FullscreenFlag);
-	SDL_ShowCursor(SDL_ENABLE);
+	//Uint32 FullscreenFlag = SDL_WINDOW_FULLSCREEN;
+	//bool IsFullscreen = SDL_GetWindowFlags(wnd) & FullscreenFlag;
+	//SDL_SetWindowFullscreen(wnd, IsFullscreen ? 0 : FullscreenFlag);
+	//SDL_ShowCursor(SDL_ENABLE);
 }
 
 Graphics::~Graphics(void)
@@ -159,13 +159,13 @@ void Graphics::DrawImage(int x, int y, const Image & img)
 	if (img.GetData() == NULL)
 		return;
 
-	SDL_Rect pos;
-	pos.x = x;
-	pos.y = y;
-	pos.w = img.m_width;
-	pos.h = img.m_height;
+	SDL_Rect m_pos;
+	m_pos.x = x;
+	m_pos.y = y;
+	m_pos.w = img.m_width;
+	m_pos.h = img.m_height;
 
-	SDL_RenderCopy(ren, img.GetData(), NULL, &pos);
+	SDL_RenderCopy(ren, img.GetData(), NULL, &m_pos);
 }
 
 void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int height, const Image & img)
@@ -173,11 +173,11 @@ void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int 
 	if (img.GetData() == NULL)
 		return;
 
-	SDL_Rect pos;
-	pos.x = x;
-	pos.y = y;
-	pos.w = width;
-	pos.h = height;
+	SDL_Rect m_pos;
+	m_pos.x = x;
+	m_pos.y = y;
+	m_pos.w = width;
+	m_pos.h = height;
 
 	SDL_Rect src;
 	src.x = fromx;
@@ -185,7 +185,7 @@ void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int 
 	src.w = width;
 	src.h = height;
 
-	SDL_RenderCopy(ren, img.GetData(), &src, &pos);
+	SDL_RenderCopy(ren, img.GetData(), &src, &m_pos);
 }
 
 void Graphics::DrawRect(int x, int y, int w, int h, const Color & color)
