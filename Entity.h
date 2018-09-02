@@ -1,17 +1,21 @@
 #pragma once
 
+#include <memory>
+#include <SDL.h>
+
 #include "Geometry.h"
 #include "Utils.h"
 
-class Moveable
+class Entity
 {
 public:
-	Moveable();
-	~Moveable();
+	Entity();
+	~Entity();
 
 // todo: protected:
 public:
 	v2d m_pos;
 	v2d m_vel;
+
 };
 

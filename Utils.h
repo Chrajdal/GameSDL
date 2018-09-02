@@ -12,16 +12,16 @@
 template<typename T>
 struct Tpoint
 {
-	Tpoint(const T & _x = 0, const T & _y = 0)
+	 Tpoint(const T & _x = 0, const T & _y = 0) noexcept
 		: m_x(_x), m_y(_y)
 	{}
-	Tpoint(const Tpoint<T> & src)
+	 Tpoint(const Tpoint<T> & src) noexcept
 		: m_x(src.m_x), m_y(src.m_y)
 	{}
-	Tpoint(const Tpoint<T> && src)
+	 Tpoint(const Tpoint<T> && src) noexcept
 		: m_x(std::move(src.m_x)), m_y(std::move(src.m_y))
 	{}
-	Tpoint<T> & operator = (const Tpoint<T> & src)
+	 Tpoint<T> & operator = (const Tpoint<T> & src)noexcept
 	{
 		if (this == &src)
 			return *this;
@@ -29,7 +29,7 @@ struct Tpoint
 		m_y = src.m_y;
 		return *this;
 	}
-	Tpoint<T> & operator = (const Tpoint<T> && src)
+	 Tpoint<T> & operator = (const Tpoint<T> && src)noexcept
 	{
 		if (this == &src)
 			return *this;
@@ -37,15 +37,15 @@ struct Tpoint
 		m_y = std::move(src.m_y);
 		return *this;
 	}
-	inline bool operator == (const Tpoint<T> & rhs) const
+	 inline bool operator == (const Tpoint<T> & rhs) const noexcept
 	{
 		return m_x == rhs.m_x && m_y == rhs.m_y;
 	}
-	inline bool operator != (const Tpoint<T> & rhs) const
+	 inline bool operator != (const Tpoint<T> & rhs) const noexcept
 	{
 		return !(*this == rhs);
 	}
-	inline bool operator <(const Tpoint<T> & rhs) const
+	 inline bool operator <(const Tpoint<T> & rhs) const noexcept
 	{
 		return m_x < rhs.m_x && m_y < rhs.m_y;
 	}
@@ -59,16 +59,16 @@ struct Tpoint
 template<typename T>
 struct Trect
 {
-	Trect(const Tpoint<T> & upleft = {}, const Tpoint<T> & downright = {})
+	 Trect(const Tpoint<T> & upleft = {}, const Tpoint<T> & downright = {}) noexcept
 		: m_upleft(upleft), m_downright(downright)
 	{}
-	Trect(const Trect<T> & src)
+	 Trect(const Trect<T> & src) noexcept
 		: m_upleft(src.m_upleft), m_downright(src.m_downright)
 	{}
-	Trect(const Trect<T> && src)
+	 Trect(const Trect<T> && src) noexcept
 		: m_upleft(std::move(src.m_upleft)), m_downright(std::move(src.m_downright))
 	{}
-	Trect<T> & operator = (const Trect<T> & src)
+	 Trect<T> & operator = (const Trect<T> & src) noexcept
 	{
 		if (this == &src)
 			return *this;
@@ -76,7 +76,7 @@ struct Trect
 		m_downright = src.m_downright;
 		return *this;
 	}
-	Trect<T> & operator = (const Trect<T> && src)
+	 Trect<T> & operator = (const Trect<T> && src) noexcept
 	{
 		if (this == &src)
 			return *this;
@@ -84,13 +84,13 @@ struct Trect
 		m_downright = std::move(src.m_downright);
 		return *this;
 	}
-	bool contains(const T & x, const T & y) const
+	bool contains(const T & x, const T & y) const noexcept
 	{
 		return !(x < m_upleft.m_x || x >= m_downright.m_x ||
 			y < m_upleft.m_y || y >= m_downright.m_y);
 	}
 
-	bool CheckCollide(const Trect<double> & rhs) const
+	bool CheckCollide(const Trect<double> & rhs) const noexcept
 	{
 		if (m_downright.m_x < rhs.m_upleft.m_x || m_upleft.m_x > rhs.m_downright.m_x) return false;
 		if (m_downright.m_y < rhs.m_upleft.m_y || m_upleft.m_y > rhs.m_downright.m_y) return false;
@@ -98,13 +98,13 @@ struct Trect
 		return true;
 	}
 
-	T Width(void)const
+	T Width(void)const noexcept
 	{
-		return (T)fabs(m_downright.m_x - m_upleft.m_x);
+		return (T)std::fabs(m_downright.m_x - m_upleft.m_x);
 	}
-	T Height(void)const
+	T Height(void)const noexcept
 	{
-		return (T)fabs(m_downright.m_y - m_upleft.m_y);
+		return (T)std::fabs(m_downright.m_y - m_upleft.m_y);
 	}
 
 	Tpoint<T> m_upleft;

@@ -154,6 +154,14 @@ void Graphics::DrawCircle(int _x, int _y, int radius, const Color & c)
 	}
 }
 
+void Graphics::DrawRect(int x, int y, int w, int h, const Color & color)
+{
+	DrawLine(x, y, x + w, y, color);
+	DrawLine(x + w, y, x + w, y + h, color);
+	DrawLine(x, y, x, y + h, color);
+	DrawLine(x, y + h, x + w, y + h, color);
+}
+
 void Graphics::DrawImage(int x, int y, const Image & img)
 {
 	if (img.GetData() == NULL)
@@ -188,10 +196,8 @@ void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int 
 	SDL_RenderCopy(ren, img.GetData(), &src, &m_pos);
 }
 
-void Graphics::DrawRect(int x, int y, int w, int h, const Color & color)
+void Graphics::DrawFont(int x, int y, const Font & font)
 {
-	DrawLine(x, y, x + w, y, color);
-	DrawLine(x+w, y, x + w, y+h, color);
-	DrawLine(x, y, x, y + h, color);
-	DrawLine(x, y+h, x + w, y+h, color);
+	
 }
+

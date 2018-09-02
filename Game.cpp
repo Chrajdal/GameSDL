@@ -43,9 +43,9 @@ Game::Game()
 	tile_sheet_dirt.LoadData(gfx, "./Assets/grass tile sheet.png");
 	tile_sheet_stone.LoadData(gfx, "./Assets/stone tile sheet.png");
 	m_player_img.LoadData(gfx, "./Assets/Main Character.png");
-	player.m_bounding_box = { { 0,0 }, {m_player_img.m_width, m_player_img.m_height} };
+	player.m_bbox = { { 0,0 }, {m_player_img.m_width, m_player_img.m_height} };
 
-	if (tile_sheet_dirt.GetData() == NULL || tile_sheet_stone.GetData() == NULL)
+	if (tile_sheet_dirt.GetData() == nullptr || tile_sheet_stone.GetData() == nullptr)
 	{
 		m_IsRunning = false;
 		return;
@@ -101,8 +101,7 @@ void Game::HandleInput()
 	double step = 1e-1; // will be changed to player.m_vel;
 	if (kbd.KeyIsPressed(SDL_SCANCODE_SPACE) /*&& player.m_curr_state != player.jump*/)
 	{
-		player.m_vel.y = -step*2;
-		//player.m_curr_state = player.jump;
+		player.ApplyForce(v2d(0, -2 * step));
 	}
 	if (kbd.KeyIsPressed(SDL_SCANCODE_LEFT) || kbd.KeyIsPressed(SDL_SCANCODE_A))
 	{
@@ -145,8 +144,8 @@ void Game::HandleInput()
 		}
 	}
 
-	cam.m_pos.x = player.m_pos.x * tile_size + player.m_bounding_box.Width() / 2 - gfx.ScreenWidth / 2;
-	cam.m_pos.y = player.m_pos.y * tile_size + player.m_bounding_box.Height() / 2 - gfx.ScreenHeight / 2;
+	cam.m_pos.x = player.m_pos.x * tile_size + player.m_bbox.Width() / 2 - gfx.ScreenWidth / 2;
+	cam.m_pos.y = player.m_pos.y * tile_size + player.m_bbox.Height() / 2 - gfx.ScreenHeight / 2;
 
 	SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
 }
@@ -189,12 +188,12 @@ void Game::UpdateModel()
 	{
 		//move the player up - so that he stands on the ground
 		player.m_pos.x = 0;
-		const Node * standing_on = terrain.at(int(std::round(player.m_pos.x)), int(std::round(player.m_pos.y + player.m_bounding_box.m_downright.m_y/tile_size)));
+		const Node * standing_on = terrain.at(int(std::round(player.m_pos.x)), int(std::round(player.m_pos.y + player.m_bbox.m_downright.m_y/tile_size)));
 		while (standing_on != NULL && standing_on->m_tile != tile_type::air)
 		{
 			player.m_pos.y -= 0.1;
 			//std::cout << "Moving player up" << std::endl;
-			standing_on = terrain.at(int(std::round(player.m_pos.x)), int(std::round(player.m_pos.y + player.m_bounding_box.m_downright.m_y/tile_size)));
+			standing_on = terrain.at(int(std::round(player.m_pos.x)), int(std::round(player.m_pos.y + player.m_bbox.m_downright.m_y/tile_size)));
 		}
 		player_has_been_placed = true;
 	}
@@ -277,8 +276,7 @@ void Game::ComposeFrame()
 		}
 	}
 
-	v2d player_pos;// = world_to_screen(player.m_pos.x, player.m_pos.y, cam);
-
+	v2d player_pos;
 	player_pos.x = player.m_pos.x * tile_size - std::round(cam.m_pos.x);
 	player_pos.y = player.m_pos.y * tile_size - std::round(cam.m_pos.y);
 
@@ -287,10 +285,10 @@ void Game::ComposeFrame()
 
 	// bounding box
 	gfx.DrawRect(
-		(int)player_pos.x + player.m_bounding_box.m_upleft.m_x,
-		(int)player_pos.y + player.m_bounding_box.m_upleft.m_y,
-		player.m_bounding_box.Width(),
-		player.m_bounding_box.Height(), Colors::Blue);
+		(int)player_pos.x + player.m_bbox.m_upleft.m_x,
+		(int)player_pos.y + player.m_bbox.m_upleft.m_y,
+		player.m_bbox.Width(),
+		player.m_bbox.Height(), Colors::Blue);
 
 	//std::cout << "Play m_pos: " << player_pos.x << ", " << player_pos.y << '\n';
 	//std::cout << "real m_pos: " << player.m_pos.x << ", " << player.m_pos.y << '\n';

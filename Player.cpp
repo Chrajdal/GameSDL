@@ -20,8 +20,8 @@ Player::~Player(void)
 void Player::Update(const QuadTree & terrain)
 {
 	// apply acceleration (gravity):
-	v2d g(0, 0.1); // + value means down on screen
-	m_vel += g;
+	v2d G(0, 0.1); // + value means down on screen
+	ApplyForce(G);
 
 	// apply friction
 	m_vel *= 0.7;
@@ -47,7 +47,7 @@ void Player::Update(const QuadTree & terrain)
 		{
 			Trect<double> ceiling_box = {
 				{ m_pos.x-1, m_pos.y - 1},
-				{ m_pos.x + (m_bounding_box.Width() / 16.0), m_pos.y} };
+				{ m_pos.x + (m_bbox.Width() / 16.0), m_pos.y} };
 		
 			std::vector<const Node *> ceiling = terrain.range(ceiling_box);
 			for (const auto & i : ceiling)
@@ -64,8 +64,8 @@ void Player::Update(const QuadTree & terrain)
 		else if (m_vel.y > 0)
 		{
 			Trect <double> ground_box = {
-				{ m_pos.x-1, m_pos.y - 1  + m_bounding_box.Height() / 16.0},
-				{ m_pos.x + m_bounding_box.Width() / 16.0, m_pos.y  + m_bounding_box.Height() / 16.0 } };
+				{ m_pos.x-1, m_pos.y - 1  + m_bbox.Height() / 16.0},
+				{ m_pos.x + m_bbox.Width() / 16.0, m_pos.y  + m_bbox.Height() / 16.0 } };
 		
 			std::vector<const Node *> ground = terrain.range(ground_box);
 			for (const auto & i : ground)
@@ -83,7 +83,7 @@ void Player::Update(const QuadTree & terrain)
 		{
 			Trect<double> left_wall_box = {
 				{ m_pos.x - 1, m_pos.y-1},
-				{ m_pos.x, m_pos.y + m_bounding_box.Height() / 16.0} };
+				{ m_pos.x, m_pos.y + m_bbox.Height() / 16.0} };
 
 			std::vector<const Node *> left_wall = terrain.range(left_wall_box);
 			for (const auto & i : left_wall)
@@ -100,8 +100,8 @@ void Player::Update(const QuadTree & terrain)
 		else if (m_vel.x > 0)
 		{
 			Trect<double> right_wall_box = {
-				{ m_pos.x - 1 + m_bounding_box.Width() / 16.0, m_pos.y-1 },
-				{ m_pos.x + m_bounding_box.Width() / 16.0, m_pos.y + m_bounding_box.Height() / 16.0 } };
+				{ m_pos.x - 1 + m_bbox.Width() / 16.0, m_pos.y-1 },
+				{ m_pos.x + m_bbox.Width() / 16.0, m_pos.y + m_bbox.Height() / 16.0 } };
 
 			std::vector<const Node *> right_wall = terrain.range(right_wall_box);
 			for (const auto & i : right_wall)
@@ -133,4 +133,9 @@ void Player::Update(const QuadTree & terrain)
 	case PlayerState::attack:
 		break;
 	}
+}
+
+void Player::ApplyForce(const v2d & force)
+{
+	m_vel += force;
 }

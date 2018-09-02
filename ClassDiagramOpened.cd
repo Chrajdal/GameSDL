@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Camera">
+    <Position X="21.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAABAAAAAAAQAAAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="m_pos" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Color">
+    <Position X="22.75" Y="0.5" Width="4.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAkgQQAAAAAAAAAAAAAAAAQAAhqAEAAAA=</HashCode>
+      <FileName>Color.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Enemy">
+    <Position X="14" Y="12.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Enemy.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Entity">
+    <Position X="12.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAQACgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Entity.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Game">
+    <Position X="16.25" Y="16" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AQQABACAAAAAgAIAAAAAQUAAEAiAAAAACAAgAAAAAAA=</HashCode>
+      <FileName>Game.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="cam" />
+      <Field Name="kbd" />
+      <Field Name="mouse" />
+      <Field Name="timer" />
+      <Field Name="gfx" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Vector2&lt;T&gt;">
+    <Position X="25.25" Y="20" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAARAAABAAAQAQAAAAAAAABAIABgAAAAAAA=</HashCode>
+      <FileName>Geometry.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Image">
+    <Position X="4.75" Y="13" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAEAAQAAABAAAAAAAAAAAAABKAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Graphics">
+    <Position X="14.25" Y="20.5" Width="6" />
+    <TypeIdentifier>
+      <HashCode>ABCAEAAAAEAAAAQEQAIAAAAASABAABAAAEAAAAAAAAE=</HashCode>
+      <FileName>Graphics.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Keyboard">
+    <Position X="11.25" Y="17.75" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAgACAIAAAAAAAACAIAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Keyboard.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mouse">
+    <Position X="16.75" Y="10.75" Width="3" />
+    <NestedTypes>
+      <Enum Name="Mouse::mouse_buttons" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Mouse.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAEAQAAgAggAAAAEAAAAYABgAAAAAAA=</HashCode>
+      <FileName>Mouse.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Node">
+    <Position X="6" Y="7.25" Width="5.25" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAIQABAAAAAAAAAACCAQIAAAAIAgAAgAAEAAAA=</HashCode>
+      <FileName>Node.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="m_tile" />
+      <Field Name="m_ne" />
+      <Field Name="m_nw" />
+      <Field Name="m_se" />
+      <Field Name="m_sw" />
+      <Field Name="m_boundary" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Player">
+    <Position X="10.25" Y="12.25" Width="3" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Player::PlayerState">
+        <TypeIdentifier>
+          <NewMemberFileName>Player.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAEAAAAAAAAAABAEAAAAAAAAAAAAAAACAAAQAAABA=</HashCode>
+      <FileName>Player.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="m_player_img" />
+      <Field Name="m_bbox" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="QuadTree">
+    <Position X="0.5" Y="7.25" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AEAEAAAoQABAAAAAAIAAAAAAAAAAAAAEgAABAAKAEAA=</HashCode>
+      <FileName>QuadTree.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="m_root" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Random">
+    <Position X="18.25" Y="0.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAIAAAAAAAAAAAAAAAAABAAAAAAAAAICAAA=</HashCode>
+      <FileName>Random.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CTimer">
+    <Position X="21" Y="16.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAgAAQCAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utils.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Tpoint&lt;T&gt;">
+    <Position X="11.75" Y="0.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAQAAQAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Utils.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Trect&lt;T&gt;">
+    <Position X="12" Y="5.25" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAACBAAAAAAAAgAAAEABAAAAAAAAAAAoAAAAAAA=</HashCode>
+      <FileName>Utils.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="m_downright" />
+      <Field Name="m_upleft" />
+    </ShowAsAssociation>
+  </Struct>
+  <Typedef Name="v2d" Collapsed="true">
+    <Position X="23" Y="20.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="v2f" Collapsed="true">
+    <Position X="23" Y="21.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry.h</FileName>
+    </TypeIdentifier>
+    <AliasOfLine Type="Vector2&lt;T&gt;" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="25.25" Y="22.062" />
+        <Point X="24.75" Y="22.062" />
+      </Path>
+    </AliasOfLine>
+  </Typedef>
+  <Typedef Name="v2i" Collapsed="true">
+    <Position X="23" Y="21" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Geometry.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="tile_type">
+    <Position X="7.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAABAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Tile.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -3,9 +3,7 @@
 #include "Utils.h"
 #include "Graphics.h"
 #include "Color.h"
-//#include "Vec2.h"
 #include <vector>
-//#include "Image.h"
 #include "Tile.h"
 
 
@@ -35,6 +33,6 @@ public:
 	int m_x;
 	int m_y;
 	Node * m_nw, *m_ne, *m_sw, *m_se;
-	mutable Trect<double> m_boundary;
+	/*mutable*/ Trect<double> m_boundary;
 	tile_type m_tile;
 };

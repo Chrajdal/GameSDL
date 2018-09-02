@@ -60,7 +60,7 @@ Vector2<T>& Vector2<T>::operator/=(const Vector2<T> &right) {
 template<typename T>
 void Vector2<T>::normalize() {
 	if (x != 0 || y != 0) {
-		T lenght = sqrt(pow(x, 2) + pow(y, 2));
+		T lenght = std::sqrt(x * x + y * y);
 		x /= lenght;
 		y /= lenght;
 	}
@@ -68,20 +68,20 @@ void Vector2<T>::normalize() {
 template<typename T>
 void Vector2<T>::rotate(T rotation) {
 	T x_1 = x;
-	x = (x * cos(rotation)) - (y * sin(rotation));
-	y = (x_1 * sin(rotation)) + (y * cos(rotation));
+	x = (x *   std::cos(rotation)) - (y * std::sin(rotation));
+	y = (x_1 * std::sin(rotation)) + (y * std::cos(rotation));
 }
 template<typename T>
 Vector2<T> Vector2<T>::rotated(T rotation) const {
 	return Vector2(
-		(x * cos(rotation)) - (y * sin(rotation)),
-		(x * sin(rotation)) + (y * cos(rotation))
+		(x * std::cos(rotation)) - (y * std::sin(rotation)),
+		(x * std::sin(rotation)) + (y * std::cos(rotation))
 	);
 }
 template<typename T>
 Vector2<T> Vector2<T>::normalized() const {
 	if (x != 0 || y != 0) {
-		T lenght = sqrt(pow(x, 2) + pow(y, 2));
+		T lenght = std::sqrt(x * x + y * y);
 		return Vector2<T>(
 			x / lenght,
 			y / lenght);
@@ -92,7 +92,7 @@ Vector2<T> Vector2<T>::normalized() const {
 }
 template<typename T>
 T Vector2<T>::absolute() const {
-	return sqrt(pow(x, 2) + pow(y, 2));
+	return std::sqrt(x * x + y * y);
 }
 template<typename T>
 T Vector2<T>::dotProduct(const Vector2<T> &left, const Vector2<T> &right) {
