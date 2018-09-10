@@ -95,7 +95,7 @@ void Game::HandleInput()
 		terrain.clear();
 	}
 
-	double step = 1e-1; // will be changed to player.m_vel;
+	double step = 2e-1; // will be changed to player.m_vel;
 	if (kbd.KeyIsPressed(SDL_SCANCODE_SPACE) /*&& player.m_curr_state != player.jump*/)
 	{
 		player.ApplyForce(v2d(0, -2 *step));
@@ -117,6 +117,7 @@ void Game::HandleInput()
 	{
 		selected_tile = tile_type::stone;
 	}
+	
 
 	// mouse code
 	{

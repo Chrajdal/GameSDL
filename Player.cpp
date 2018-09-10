@@ -19,13 +19,6 @@ Player::~Player(void)
 
 void Player::Update(const QuadTree & terrain)
 {
-	// apply acceleration (gravity):
-	v2d G(0, 0.1); // + value means down on screen
-	ApplyForce(G);
-
-	// apply friction
-	m_vel *= 0.7;
-
 	// check collisions
 	/*
 	 -> a-j are tiles next to the player
@@ -46,6 +39,7 @@ void Player::Update(const QuadTree & terrain)
 			{
 				m_vel.y = 0;
 				m_pos.x += m_vel.x;
+				m_pos.y = std::round(m_pos.y);
 			}
 		}
 		if (m_vel.y > 0)
@@ -54,6 +48,7 @@ void Player::Update(const QuadTree & terrain)
 			{
 				m_vel.y = 0;
 				m_pos.x += m_vel.x;
+				m_pos.y = std::round(m_pos.y);
 			}
 		}
 		if (m_vel.x < 0)
@@ -62,6 +57,7 @@ void Player::Update(const QuadTree & terrain)
 			{
 				m_vel.x = 0;
 				m_pos.y += m_vel.y;
+				m_pos.x = std::round(m_pos.x);
 			}
 		}
 		if (m_vel.x > 0)
@@ -70,9 +66,18 @@ void Player::Update(const QuadTree & terrain)
 			{
 				m_vel.x = 0;
 				m_pos.y += m_vel.y;
+				m_pos.x = std::round(m_pos.x);
 			}
 		}
 	}
+
+	// apply acceleration (gravity):
+	v2d G(0, 0.1); // + value means down on screen
+	ApplyForce(G);
+
+	// apply friction
+	m_vel *= 0.7;
+
 	
 	// apply velocity
 	m_pos += m_vel;
