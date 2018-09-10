@@ -1,53 +1,47 @@
 #include "MovingEntity.h"
 
-
-
 MovingEntity::MovingEntity()
 {
 }
-
 
 MovingEntity::~MovingEntity()
 {
 }
 
-
-
 bool MovingEntity::GetTColl(const QuadTree & terrain)
 {
-	std::cout << GetTRect() << std::endl;
 	std::vector<const Node *> ceiling = terrain.range(GetTRect());
-	return std::find_if(
-		ceiling.begin(),
-		ceiling.end(),
-		[](const Node * n) {return n->m_tile == tile_type::air; }) == ceiling.end();
+	for (const auto & i : ceiling)
+		if (i->m_tile != tile_type::air)
+			return true;
+	return false;
 }
 
 bool MovingEntity::GetBColl(const QuadTree & terrain)
 {
 	std::vector<const Node *> floor = terrain.range(GetBRect());
-	return std::find_if(
-		floor.begin(),
-		floor.end(),
-		[](const Node * n) {return n->m_tile == tile_type::air; }) == floor.end();
+	for (const auto & i : floor)
+		if (i->m_tile != tile_type::air)
+			return true;
+	return false;
 }
 
 bool MovingEntity::GetLColl(const QuadTree & terrain)
 {
 	std::vector<const Node *> left_wall = terrain.range(GetLRect());
-	return std::find_if(
-		left_wall.begin(),
-		left_wall.end(),
-		[](const Node * n) {return n->m_tile == tile_type::air; }) == left_wall.end();
+	for (const auto & i : left_wall)
+		if (i->m_tile != tile_type::air)
+			return true;
+	return false;
 }
 
 bool MovingEntity::GetRColl(const QuadTree & terrain)
 {
-	std::vector<const Node *> right_wall = terrain.range(GetRRect());
-	return std::find_if(
-		right_wall.begin(),
-		right_wall.end(),
-		[](const Node * n) {return n->m_tile == tile_type::air; }) == right_wall.end();
+	std::vector<const Node *> right_wall = terrain.range(GetRRect());	
+	for (const auto & i : right_wall)
+		if (i->m_tile != tile_type::air)
+			return true;
+	return false;
 }
 
 Trect<double> MovingEntity::GetTRect(void)
@@ -60,9 +54,9 @@ Trect<double> MovingEntity::GetBRect(void)
 }
 Trect<double> MovingEntity::GetLRect(void)
 {
-	return { m_pos.x - 1, m_pos.y, m_pos.x , m_pos.y + m_bbox.Height() };
+	return { m_pos.x - 1,std::floor(m_pos.y), m_pos.x , std::ceil(m_pos.y + m_bbox.Height()-0.1) };
 }
 Trect<double> MovingEntity::GetRRect(void)
 {
-	return { m_pos.x + m_bbox.Width(), m_pos.y, m_pos.x + m_bbox.Width() + 1, m_pos.y + m_bbox.Height() };
+	return { m_pos.x + m_bbox.Width(), std::floor(m_pos.y), m_pos.x + m_bbox.Width() + 1, std::ceil(m_pos.y + m_bbox.Height()-0.1) };
 }
