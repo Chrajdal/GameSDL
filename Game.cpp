@@ -96,9 +96,10 @@ void Game::HandleInput()
 	}
 
 	double step = 2e-1; // will be changed to player.m_vel;
-	if (kbd.KeyIsPressed(SDL_SCANCODE_SPACE) /*&& player.m_curr_state != player.jump*/)
+	if (kbd.KeyIsPressed(SDL_SCANCODE_SPACE) && player.m_curr_state != Player::PlayerState::jump)
 	{
-		player.ApplyForce(v2d(0, -2 *step));
+		player.ApplyForce(v2d(0, -10 *step));
+		player.m_curr_state = Player::PlayerState::jump;
 	}
 	if (kbd.KeyIsPressed(SDL_SCANCODE_LEFT) || kbd.KeyIsPressed(SDL_SCANCODE_A))
 	{

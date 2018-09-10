@@ -59,5 +59,5 @@ Trect<double> MovingEntity::GetLRect(void)
 }
 Trect<double> MovingEntity::GetRRect(void)
 {
-	return { m_pos.x + m_bbox.Width(), std::floor(m_pos.y), m_pos.x + m_bbox.Width() + 1, std::ceil(m_pos.y + m_bbox.Height()-0.1) };
+	return { m_pos.x + m_bbox.Width()-1, std::floor(m_pos.y), m_pos.x + m_bbox.Width() , std::ceil(m_pos.y + m_bbox.Height()-0.1) };
 }

@@ -49,6 +49,8 @@ void Player::Update(const QuadTree & terrain)
 				m_vel.y = 0;
 				m_pos.x += m_vel.x;
 				m_pos.y = std::round(m_pos.y);
+				if (m_curr_state == PlayerState::jump)
+					m_curr_state = PlayerState::idle;
 			}
 		}
 		if (m_vel.x < 0)
@@ -76,9 +78,8 @@ void Player::Update(const QuadTree & terrain)
 	ApplyForce(G);
 
 	// apply friction
-	m_vel *= 0.7;
-
-	
+	m_vel *= 0.8;
+		
 	// apply velocity
 	m_pos += m_vel;
 
