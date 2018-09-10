@@ -2,7 +2,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <SDL_ttf.h>
+///#include <SDL_ttf.h>
 #include <vector>
 #include <string>
 #include <iostream>
@@ -11,6 +11,7 @@
 
 class Graphics;
 
+/*
 class Font
 {
 public:
@@ -20,6 +21,7 @@ private:
 public:
 
 };
+*/
 
 class Image
 {
@@ -53,7 +55,7 @@ public:
 	void DrawImage(int x, int y, const Image & img);
 	void DrawPartImage(int x, int y, int fromx, int fromy, int width, int height, const Image & img);
 
-	void DrawFont(int x, int y, const Font & font);
+	//void DrawFont(int x, int y, const Font & font);
 
 	inline unsigned width(void) { return ScreenWidth; }
 	inline unsigned height(void){ return ScreenHeight; }	

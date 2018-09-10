@@ -5,6 +5,9 @@
 #include "Geometry.h"
 #include "QuadTree.h"
 #include "Utils.h"
+#include "Camera.h"
+
+#include <iostream>
 
 class Player : public Entity // todo: class Player : private Entity
 {
@@ -27,9 +30,9 @@ public:
 	PlayerState m_curr_state;
 	Trect<int> m_bbox;
 
-private:
-	bool CheckCeilingCollision(const QuadTree & terrain)const;
-	bool CheckFloorCollision(const QuadTree & terrain)const;
-	bool CheckLeftWallCollision(const QuadTree & terrain)const;
-	bool CheckRightWallCollision(const QuadTree & terrain)const;
+public: // only for now - make it private later
+	bool CheckCeilingCollision  (const QuadTree & terrain, Graphics & gfx, Camera & cam)const;
+	bool CheckFloorCollision    (const QuadTree & terrain, Graphics & gfx, Camera & cam)const;
+	bool CheckLeftWallCollision (const QuadTree & terrain, Graphics & gfx, Camera & cam)const;
+	bool CheckRightWallCollision(const QuadTree & terrain, Graphics & gfx, Camera & cam)const;
 };

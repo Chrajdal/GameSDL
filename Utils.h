@@ -110,6 +110,13 @@ struct Trect
 	Tpoint<T> m_upleft;
 	Tpoint<T> m_downright;
 };
+
+template<typename T>
+std::ostream & operator <<(std::ostream & os, const Trect<T> & src)
+{
+	return os << src.m_upleft.m_x << ", " << src.m_upleft.m_y << " / "
+		<< src.m_downright.m_x << ", " << src.m_downright.m_y;
+}
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

@@ -196,8 +196,8 @@ void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int 
 	SDL_RenderCopy(ren, img.GetData(), &src, &m_pos);
 }
 
-void Graphics::DrawFont(int x, int y, const Font & font)
-{
-	
-}
+//void Graphics::DrawFont(int x, int y, const Font & font)
+//{
+//	
+//}
 

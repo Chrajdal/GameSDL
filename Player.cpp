@@ -26,7 +26,6 @@ void Player::Update(const QuadTree & terrain)
 	// apply friction
 	m_vel *= 0.7;
 
-
 	// check collisions
 	/*
 	 -> a-j are tiles next to the player
@@ -138,4 +137,86 @@ void Player::Update(const QuadTree & terrain)
 void Player::ApplyForce(const v2d & force)
 {
 	m_vel += force;
+}
+
+bool Player::CheckCeilingCollision(const QuadTree & terrain, Graphics & gfx, Camera & cam) const
+{
+	Trect<double> ceiling_box = {
+		{ m_pos.x - 1, m_pos.y - 1 },
+		{ m_pos.x + (m_bbox.Width() / 16.0), m_pos.y } };
+
+	std::cout << ceiling_box << "\n";
+
+	ceiling_box.m_upleft.m_x =    ceiling_box.m_upleft.m_x * 16 + std::round(cam.m_pos.x);
+	ceiling_box.m_upleft.m_y =    ceiling_box.m_upleft.m_y * 16 + std::round(cam.m_pos.y);
+	ceiling_box.m_downright.m_x = ceiling_box.m_downright.m_x * 16 + std::round(cam.m_pos.x);
+	ceiling_box.m_downright.m_y = ceiling_box.m_downright.m_y * 16 + std::round(cam.m_pos.y);
+
+	gfx.DrawRect(
+		(int)ceiling_box.m_upleft.m_x, (int)ceiling_box.m_upleft.m_y,
+		(int)ceiling_box.Width(), (int)ceiling_box.Height(),
+		Colors::Blue);
+
+	return false; 
+}
+
+bool Player::CheckFloorCollision(const QuadTree & terrain, Graphics & gfx, Camera & cam) const
+{
+	Trect <double> floor_box = {
+		{ m_pos.x - 1, m_pos.y - 1 + m_bbox.Height() / 16.0 },
+		{ m_pos.x + m_bbox.Width() / 16.0, m_pos.y + m_bbox.Height() / 16.0 } };
+
+	std::cout << floor_box << "\n";
+
+	floor_box.m_upleft.m_x =    floor_box.m_upleft.m_x * 16 + std::round(cam.m_pos.x);
+	floor_box.m_upleft.m_y =    floor_box.m_upleft.m_y * 16 + std::round(cam.m_pos.y);
+	floor_box.m_downright.m_x = floor_box.m_downright.m_x * 16 + std::round(cam.m_pos.x);
+	floor_box.m_downright.m_y = floor_box.m_downright.m_y * 16 + std::round(cam.m_pos.y);
+
+	gfx.DrawRect(
+		(int)floor_box.m_upleft.m_x, (int)floor_box.m_upleft.m_y,
+		(int)floor_box.Width(), (int)floor_box.Height(),
+		Colors::Red);
+
+	return false;
+}
+
+bool Player::CheckLeftWallCollision(const QuadTree & terrain, Graphics & gfx, Camera & cam) const
+{
+	Trect<double> left_wall_box = {
+		{ m_pos.x - 1, m_pos.y - 1 },
+		{ m_pos.x, m_pos.y + m_bbox.Height() / 16.0 } };
+
+	std::cout << left_wall_box << "\n";
+
+	left_wall_box.m_upleft.m_x =    left_wall_box.m_upleft.m_x * 16 + std::round(cam.m_pos.x);
+	left_wall_box.m_upleft.m_y =    left_wall_box.m_upleft.m_y * 16 + std::round(cam.m_pos.y);
+	left_wall_box.m_downright.m_x = left_wall_box.m_downright.m_x * 16 + std::round(cam.m_pos.x);
+	left_wall_box.m_downright.m_y = left_wall_box.m_downright.m_y * 16 + std::round(cam.m_pos.y);
+
+	gfx.DrawRect(
+		(int)left_wall_box.m_upleft.m_x, (int)left_wall_box.m_upleft.m_y,
+		(int)left_wall_box.Width(), (int)left_wall_box.Height(),
+		Colors::Green);
+	return false;
+}
+
+bool Player::CheckRightWallCollision(const QuadTree & terrain, Graphics & gfx, Camera & cam) const
+{
+	Trect<double> right_wall_box = {
+		{ m_pos.x - 1 + m_bbox.Width() / 16.0, m_pos.y - 1 },
+		{ m_pos.x + m_bbox.Width() / 16.0, m_pos.y + m_bbox.Height() / 16.0 } };
+
+	std::cout << right_wall_box << "\n";
+
+	right_wall_box.m_upleft.m_x    = right_wall_box.m_upleft.m_x    * 16 + std::round(cam.m_pos.x);
+	right_wall_box.m_upleft.m_y    = right_wall_box.m_upleft.m_y    * 16 + std::round(cam.m_pos.y);
+	right_wall_box.m_downright.m_x = right_wall_box.m_downright.m_x * 16 + std::round(cam.m_pos.x);
+	right_wall_box.m_downright.m_y = right_wall_box.m_downright.m_y * 16 + std::round(cam.m_pos.y);
+
+	gfx.DrawRect(
+		(int)right_wall_box.m_upleft.m_x, (int)right_wall_box.m_upleft.m_y,
+		(int)right_wall_box.Width(), (int)right_wall_box.Height(),
+		Colors::Yellow);
+	return false;
 }

@@ -147,7 +147,9 @@ void Game::HandleInput()
 	cam.m_pos.x = player.m_pos.x * tile_size + player.m_bbox.Width() / 2 - gfx.ScreenWidth / 2;
 	cam.m_pos.y = player.m_pos.y * tile_size + player.m_bbox.Height() / 2 - gfx.ScreenHeight / 2;
 
-	SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
+	//SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
+	while (SDL_PollEvent(&e));
+	
 }
 
 void Game::UpdateModel()
@@ -289,6 +291,11 @@ void Game::ComposeFrame()
 		(int)player_pos.y + player.m_bbox.m_upleft.m_y,
 		player.m_bbox.Width(),
 		player.m_bbox.Height(), Colors::Blue);
+
+	player.CheckCeilingCollision(terrain, gfx, cam);
+	player.CheckFloorCollision(terrain, gfx, cam);
+	player.CheckLeftWallCollision(terrain, gfx, cam);
+	player.CheckRightWallCollision(terrain, gfx, cam);
 
 	//std::cout << "Play m_pos: " << player_pos.x << ", " << player_pos.y << '\n';
 	//std::cout << "real m_pos: " << player.m_pos.x << ", " << player.m_pos.y << '\n';
