@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Entity.h"
+#include "MovingEntity.h"
 #include "Graphics.h"
 #include "Geometry.h"
 #include "QuadTree.h"
 #include "Utils.h"
 #include "Camera.h"
 
-#include <iostream>
+#include <iostream> // temporary
 
-class Player : public Entity // todo: class Player : private Entity
+class Player : public MovingEntity // todo: class Player : protected MovingEntity
 {
 public:
 	Player(Image * img);
@@ -28,7 +28,7 @@ public:
 
 	Image * m_player_img;
 	PlayerState m_curr_state;
-	Trect<int> m_bbox;
+	//Trect<int> m_bbox;
 
 public: // only for now - make it private later
 	bool CheckCeilingCollision  (const QuadTree & terrain, Graphics & gfx, Camera & cam)const;

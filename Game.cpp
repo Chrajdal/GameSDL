@@ -21,10 +21,7 @@ v2d screen_to_world(double x, double y, const Camera & cam)
 
 v2d world_to_screen(double x, double y, const Camera & cam)
 {
-	v2d res;
-	res.x = (x)* tile_size + cam.m_pos.x;
-	res.y = (y)* tile_size + cam.m_pos.y;
-	return res;
+	return v2d(x * tile_size - cam.m_pos.x, y * tile_size - cam.m_pos.y);
 }
 
 void load_from_file(void)
@@ -43,7 +40,7 @@ Game::Game()
 	tile_sheet_dirt.LoadData(gfx, "./Assets/grass tile sheet.png");
 	tile_sheet_stone.LoadData(gfx, "./Assets/stone tile sheet.png");
 	m_player_img.LoadData(gfx, "./Assets/Main Character.png");
-	player.m_bbox = { { 0,0 }, {m_player_img.m_width, m_player_img.m_height} };
+	player.m_bbox = { { 0.0,0.0 }, {(double)m_player_img.m_width / tile_size,(double)m_player_img.m_height / tile_size} };
 
 	if (tile_sheet_dirt.GetData() == nullptr || tile_sheet_stone.GetData() == nullptr)
 	{
@@ -101,7 +98,7 @@ void Game::HandleInput()
 	double step = 1e-1; // will be changed to player.m_vel;
 	if (kbd.KeyIsPressed(SDL_SCANCODE_SPACE) /*&& player.m_curr_state != player.jump*/)
 	{
-		player.ApplyForce(v2d(0, -2 * step));
+		player.ApplyForce(v2d(0, -2 *step));
 	}
 	if (kbd.KeyIsPressed(SDL_SCANCODE_LEFT) || kbd.KeyIsPressed(SDL_SCANCODE_A))
 	{
@@ -144,8 +141,8 @@ void Game::HandleInput()
 		}
 	}
 
-	cam.m_pos.x = player.m_pos.x * tile_size + player.m_bbox.Width() / 2 - gfx.ScreenWidth / 2;
-	cam.m_pos.y = player.m_pos.y * tile_size + player.m_bbox.Height() / 2 - gfx.ScreenHeight / 2;
+	cam.m_pos.x = (player.m_pos.x + player.m_bbox.Width() / 2) * tile_size - gfx.ScreenWidth / 2;
+	cam.m_pos.y = (player.m_pos.y + player.m_bbox.Height() / 2)* tile_size - gfx.ScreenHeight / 2;
 
 	//SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
 	while (SDL_PollEvent(&e));
@@ -190,13 +187,19 @@ void Game::UpdateModel()
 	{
 		//move the player up - so that he stands on the ground
 		player.m_pos.x = 0;
-		const Node * standing_on = terrain.at(int(std::round(player.m_pos.x)), int(std::round(player.m_pos.y + player.m_bbox.m_downright.m_y/tile_size)));
-		while (standing_on != NULL && standing_on->m_tile != tile_type::air)
+
+		while (player.GetBColl(terrain))
 		{
-			player.m_pos.y -= 0.1;
-			//std::cout << "Moving player up" << std::endl;
-			standing_on = terrain.at(int(std::round(player.m_pos.x)), int(std::round(player.m_pos.y + player.m_bbox.m_downright.m_y/tile_size)));
+			player.m_pos.y -= 1.0;
 		}
+
+		//const Node * standing_on = terrain.at(int(std::round(player.m_pos.x)), int(std::round(player.m_pos.y + player.m_bbox.m_downright.m_y)));
+		//while (standing_on != NULL && standing_on->m_tile != tile_type::air)
+		//{
+		//	player.m_pos.y -= 0.1;
+		//	//std::cout << "Moving player up" << std::endl;
+		//	standing_on = terrain.at(int(std::round(player.m_pos.x)), int(std::round(player.m_pos.y + player.m_bbox.m_downright.m_y)));
+		//}
 		player_has_been_placed = true;
 	}
 
@@ -278,29 +281,53 @@ void Game::ComposeFrame()
 		}
 	}
 
-	v2d player_pos;
-	player_pos.x = player.m_pos.x * tile_size - std::round(cam.m_pos.x);
-	player_pos.y = player.m_pos.y * tile_size - std::round(cam.m_pos.y);
-
-
+	v2d player_pos = world_to_screen(player.m_pos.x, player.m_pos.y, cam);
+	
 	gfx.DrawImage((int)player_pos.x, (int)player_pos.y, *player.m_player_img);
 
 	// bounding box
 	gfx.DrawRect(
-		(int)player_pos.x + player.m_bbox.m_upleft.m_x,
-		(int)player_pos.y + player.m_bbox.m_upleft.m_y,
-		player.m_bbox.Width(),
-		player.m_bbox.Height(), Colors::Blue);
+		(int)player_pos.x + player.m_bbox.m_upleft.m_x*tile_size,
+		(int)player_pos.y + player.m_bbox.m_upleft.m_y*tile_size,
+		player.m_bbox.Width() *tile_size,
+		player.m_bbox.Height()*tile_size, Colors::Blue);
 
-	player.CheckCeilingCollision(terrain, gfx, cam);
-	player.CheckFloorCollision(terrain, gfx, cam);
-	player.CheckLeftWallCollision(terrain, gfx, cam);
-	player.CheckRightWallCollision(terrain, gfx, cam);
+	//player.CheckCeilingCollision(terrain, gfx, cam);
+	//player.CheckFloorCollision(terrain, gfx, cam);
+	//player.CheckLeftWallCollision(terrain, gfx, cam);
+	//player.CheckRightWallCollision(terrain, gfx, cam);
+
+	Trect<double> rect = player.GetTRect();
+	rect.m_upleft.m_x = rect.m_upleft.m_x * tile_size - std::round(cam.m_pos.x);
+	rect.m_upleft.m_y = rect.m_upleft.m_y * tile_size - std::round(cam.m_pos.y);
+	rect.m_downright.m_x = rect.m_downright.m_x * tile_size - std::round(cam.m_pos.x);
+	rect.m_downright.m_y = rect.m_downright.m_y * tile_size - std::round(cam.m_pos.y);
+	gfx.DrawRect(rect.m_upleft.m_x, rect.m_upleft.m_y, rect.Width(), rect.Height(), Colors::Blue);
+
+	rect = player.GetBRect();
+	rect.m_upleft.m_x = rect.m_upleft.m_x * tile_size - std::round(cam.m_pos.x);
+	rect.m_upleft.m_y = rect.m_upleft.m_y * tile_size - std::round(cam.m_pos.y);
+	rect.m_downright.m_x = rect.m_downright.m_x * tile_size - std::round(cam.m_pos.x);
+	rect.m_downright.m_y = rect.m_downright.m_y * tile_size - std::round(cam.m_pos.y);
+	gfx.DrawRect(rect.m_upleft.m_x, rect.m_upleft.m_y, rect.Width(), rect.Height(), Colors::Green);
+
+	rect = player.GetLRect();
+	rect.m_upleft.m_x = rect.m_upleft.m_x * tile_size - std::round(cam.m_pos.x);
+	rect.m_upleft.m_y = rect.m_upleft.m_y * tile_size - std::round(cam.m_pos.y);
+	rect.m_downright.m_x = rect.m_downright.m_x * tile_size - std::round(cam.m_pos.x);
+	rect.m_downright.m_y = rect.m_downright.m_y * tile_size - std::round(cam.m_pos.y);
+	gfx.DrawRect(rect.m_upleft.m_x, rect.m_upleft.m_y, rect.Width(), rect.Height(), Colors::Red);
+
+	rect = player.GetRRect();
+	rect.m_upleft.m_x = rect.m_upleft.m_x * tile_size - std::round(cam.m_pos.x);
+	rect.m_upleft.m_y = rect.m_upleft.m_y * tile_size - std::round(cam.m_pos.y);
+	rect.m_downright.m_x = rect.m_downright.m_x * tile_size - std::round(cam.m_pos.x);
+	rect.m_downright.m_y = rect.m_downright.m_y * tile_size - std::round(cam.m_pos.y);
+	gfx.DrawRect(rect.m_upleft.m_x, rect.m_upleft.m_y, rect.Width(), rect.Height() , Colors::Yellow);
 
 	//std::cout << "Play m_pos: " << player_pos.x << ", " << player_pos.y << '\n';
 	//std::cout << "real m_pos: " << player.m_pos.x << ", " << player.m_pos.y << '\n';
-
-
+	
 	/**/
 	//gfx.DrawLine(0, 0, gfx.ScreenWidth - 1, gfx.ScreenHeight - 1, Colors::Red);
 	//gfx.DrawLine(gfx.ScreenWidth - 1, 0, 0, gfx.ScreenHeight - 1, Colors::Red);

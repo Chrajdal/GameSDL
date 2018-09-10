@@ -59,6 +59,9 @@ struct Tpoint
 template<typename T>
 struct Trect
 {
+	Trect(double x1, double y1, double x2, double y2) noexcept
+		: m_upleft({ x1,y1 }), m_downright({x2,y2})
+	{}
 	 Trect(const Tpoint<T> & upleft = {}, const Tpoint<T> & downright = {}) noexcept
 		: m_upleft(upleft), m_downright(downright)
 	{}
