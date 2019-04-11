@@ -13,7 +13,7 @@ public:
 	{
 		if (event.type == SDL_MOUSEBUTTONDOWN)
 			MouseStates[event.button.button - 1] = true;
-		if (event.type == SDL_MOUSEBUTTONUP)
+		else if (event.type == SDL_MOUSEBUTTONUP)
 			MouseStates[event.button.button - 1] = false;
 
 		SDL_GetMouseState(&x, &y);

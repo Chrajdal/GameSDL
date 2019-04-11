@@ -83,8 +83,9 @@ void Game::HandleInput()
 {
 	SDL_Event e;
 	SDL_PollEvent(&e);
-	mouse.SetMouseState(e);
-
+	//mouse.SetMouseState(e);
+	
+	// keyboard code
 	if (kbd.KeyIsPressed(SDL_SCANCODE_ESCAPE))
 	{
 		m_IsRunning = false;
@@ -119,7 +120,7 @@ void Game::HandleInput()
 		selected_tile = tile_type::stone;
 	}
 	
-
+	mouse.SetMouseState(e);
 	// mouse code
 	{
 		int x = mouse.GetX();
@@ -147,8 +148,7 @@ void Game::HandleInput()
 	cam.m_pos.y = (player.m_pos.y + player.m_bbox.Height() / 2)* tile_size - gfx.ScreenHeight / 2;
 
 	//SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
-	while (SDL_PollEvent(&e));
-	
+	//while (SDL_PollEvent(&e));
 }
 
 void Game::UpdateModel()
@@ -254,7 +254,7 @@ void Game::ComposeFrame()
 		{ 0 + cam.m_pos.x - tile_size,0 + cam.m_pos.y - tile_size },
 		{ gfx.width() + cam.m_pos.x + tile_size, gfx.height() + cam.m_pos.y + tile_size });
 
-	// scale view to pick up only tile_size'th od the pixels
+	// scale view to pick up only tile_size'th of the pixels
 	view.m_upleft.m_x /= tile_size;
 	view.m_upleft.m_y /= tile_size;
 	view.m_downright.m_x /= tile_size;
