@@ -12,8 +12,10 @@
 
 #include "Game.h"
 
+
 int main(void)
 {
+	
 	Game TheGame;
 
 	while (TheGame.IsRunning() == true)
@@ -30,6 +32,7 @@ int main(void)
 			std::this_thread::sleep_for(std::chrono::milliseconds((unsigned)frame_wait));
 		}
 	}
+	
 
 	//TTF_Quit();
 	IMG_Quit();

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vector>
 #include <chrono>
+#include <ostream>
 
 #include "Color.h"
 

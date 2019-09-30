@@ -22,6 +22,7 @@ public:
 	
 public:
 	v2d m_vel;
+	v2d m_acc;
 	Trect<double> m_bbox;
 };
 

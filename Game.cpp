@@ -99,8 +99,16 @@ void Game::HandleInput()
 	double step = 2e-1; // will be changed to player.m_vel;
 	if (kbd.KeyIsPressed(SDL_SCANCODE_SPACE) && player.m_curr_state != Player::PlayerState::jump)
 	{
-		player.ApplyForce(v2d(0, -10 *step));
-		player.m_curr_state = Player::PlayerState::jump;
+		player.doJump(terrain);
+
+		player.m_vel = player.m_vel + (10 * step * 0.1);
+
+		// Clamp to maximum velocity
+		player.m_vel.x = std::min(10*step, std::max(player.m_vel.x, -10 * step));
+		player.m_vel.y = std::min(10 * step, std::max(player.m_vel.y, -10 * step));
+
+		//player.ApplyForce(v2d(0, -10 *step));
+		//player.m_curr_state = Player::PlayerState::jump;
 	}
 	if (kbd.KeyIsPressed(SDL_SCANCODE_LEFT) || kbd.KeyIsPressed(SDL_SCANCODE_A))
 	{
