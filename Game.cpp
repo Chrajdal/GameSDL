@@ -99,7 +99,7 @@ void Game::HandleInput()
 	double step = 2e-1; // will be changed to player.m_vel;
 	if (kbd.KeyIsPressed(SDL_SCANCODE_SPACE) && player.m_curr_state != Player::PlayerState::jump)
 	{
-		player.doJump(terrain);
+		player.do_jump(terrain);
 
 		player.m_vel = player.m_vel + (10 * step * 0.1);
 
@@ -136,7 +136,7 @@ void Game::HandleInput()
 
 		v2d world_pos = screen_to_world(x, y, cam);
 		Node * tmp = terrain.access((int)std::floor(world_pos.x), (int)std::floor(world_pos.y)); // instead of floor it is possible to use overtyping to int
-		if (tmp == NULL)
+		if (tmp == nullptr)
 		{
 			std::cout << "ERROR" << std::endl;
 			return;
@@ -204,7 +204,7 @@ void Game::UpdateModel()
 		}
 
 		//const Node * standing_on = terrain.at(int(std::round(player.m_pos.x)), int(std::round(player.m_pos.y + player.m_bbox.m_downright.m_y)));
-		//while (standing_on != NULL && standing_on->m_tile != tile_type::air)
+		//while (standing_on != nullptr && standing_on->m_tile != tile_type::air)
 		//{
 		//	player.m_pos.y -= 0.1;
 		//	//std::cout << "Moving player up" << std::endl;
@@ -224,7 +224,7 @@ Trect<int> const & pick_correct_tile_rect(int x, int y, const QuadTree & terrain
 	const Node * lf = terrain.at(x - 1, y);
 	const Node * rt = terrain.at(x + 1, y);
 	
-	if (up != NULL && dw != NULL && lf != NULL && rt != NULL)
+	if (up != nullptr && dw != nullptr && lf != nullptr && rt != nullptr)
 	{
 		std::bitset<4> relative_position;
 		relative_position[0]= up->m_tile != tile_type::air;

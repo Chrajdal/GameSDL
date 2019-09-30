@@ -22,10 +22,10 @@ public:
 
 	friend std::ostream & operator << (std::ostream & os, const Node & src)
 	{
-		if (src.m_nw != NULL) os << *src.m_nw;
-		if (src.m_ne != NULL) os << *src.m_ne;
-		if (src.m_sw != NULL) os << *src.m_sw;
-		if (src.m_se != NULL) os << *src.m_se;
+		if (src.m_nw != nullptr) os << *src.m_nw;
+		if (src.m_ne != nullptr) os << *src.m_ne;
+		if (src.m_sw != nullptr) os << *src.m_sw;
+		if (src.m_se != nullptr) os << *src.m_se;
 
 		return os << src.m_x << " " << src.m_y << " " << src.m_tile << " # ";
 	}

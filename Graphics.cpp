@@ -2,20 +2,20 @@
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Image::Image(void)
-	: m_texture(NULL),
+	: m_texture(nullptr),
 	m_width(0),
 	m_height(0)
 {}
 Image::~Image(void)
 {
-	if (m_texture != NULL)
+	if (m_texture != nullptr)
 		SDL_DestroyTexture(m_texture);
 }
 
 bool Image::LoadData(Graphics & gfx, const std::string & file_name)
 {
 	//Get rid of preexisting texture
-	if (m_texture != NULL)
+	if (m_texture != nullptr)
 	{
 		SDL_DestroyTexture(m_texture);
 		m_width = 0;
@@ -23,17 +23,17 @@ bool Image::LoadData(Graphics & gfx, const std::string & file_name)
 	}
 
 	//The final texture
-	SDL_Texture * nTexture = NULL;
+	SDL_Texture * nTexture = nullptr;
 
 	//Load image at specified path
 	SDL_Surface* loadedSurface = IMG_Load(file_name.c_str());
-	if (loadedSurface == NULL)
+	if (loadedSurface == nullptr)
 		SDL_Log("IMG_Load failed: %s", SDL_GetError());
 	else
 	{
 		//Create texture from surface pixels
 		nTexture = SDL_CreateTextureFromSurface(gfx.ren, loadedSurface);
-		if (nTexture == NULL)
+		if (nTexture == nullptr)
 			SDL_Log("SDL_CreateTextureFromSurface failed: %s", SDL_GetError());
 		else
 		{
@@ -47,7 +47,7 @@ bool Image::LoadData(Graphics & gfx, const std::string & file_name)
 	}
 
 	m_texture = nTexture;
-	return m_texture != NULL;
+	return m_texture != nullptr;
 }
 
 SDL_Texture * Image::GetData(void)const
@@ -59,7 +59,7 @@ SDL_Texture * Image::GetData(void)const
 
 Graphics::Graphics(void)
 {
-	if (SDL_Init(SDL_INIT_EVERYTHING) != NULL)
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 		SDL_Log("SDL_Init failed: %s", SDL_GetError());
 
 	SDL_DisplayMode dm;
@@ -79,11 +79,11 @@ Graphics::Graphics(void)
 		ScreenWidth, ScreenHeight,
 		0);
 
-	if (wnd == NULL)
+	if (wnd == nullptr)
 		SDL_Log("SDL_CreateWindow failed: %s", SDL_GetError());
 
 	ren = SDL_CreateRenderer(wnd, 0, 0);
-	if (ren == NULL)
+	if (ren == nullptr)
 		SDL_Log("SDL_CreateRenderer failed: %s", SDL_GetError());
 
 	// Toggle Fullscreen
@@ -164,7 +164,7 @@ void Graphics::DrawRect(int x, int y, int w, int h, const Color & color)
 
 void Graphics::DrawImage(int x, int y, const Image & img)
 {
-	if (img.GetData() == NULL)
+	if (img.GetData() == nullptr)
 		return;
 
 	SDL_Rect m_pos;
@@ -173,12 +173,12 @@ void Graphics::DrawImage(int x, int y, const Image & img)
 	m_pos.w = img.m_width;
 	m_pos.h = img.m_height;
 
-	SDL_RenderCopy(ren, img.GetData(), NULL, &m_pos);
+	SDL_RenderCopy(ren, img.GetData(), nullptr, &m_pos);
 }
 
 void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int height, const Image & img)
 {
-	if (img.GetData() == NULL)
+	if (img.GetData() == nullptr)
 		return;
 
 	SDL_Rect m_pos;

@@ -1,7 +1,7 @@
 #include "QuadTree.h"
 
 QuadTree::QuadTree(void)
-	: m_root(NULL), m_size(0)
+	: m_root(nullptr), m_size(0)
 {}
 
 QuadTree::~QuadTree(void)
@@ -11,7 +11,7 @@ QuadTree::~QuadTree(void)
 
 void QuadTree::insert(const Node & n)
 {
-	if (m_root == NULL)
+	if (m_root == nullptr)
 	{
 		Trect<double> boundary{ { -100000, -100000 },{ 100000, 100000 } };
 		if (boundary.contains(n.m_x, n.m_y))
@@ -30,23 +30,23 @@ void QuadTree::insert(const Node & n)
 std::vector<const Node *> QuadTree::range(const Trect<double> & range) const
 {
 	std::vector<const Node *> res;
-	if (m_root != NULL)
+	if (m_root != nullptr)
 		m_root->range(res, range);
 	return res;
 }
 
 const Node * QuadTree::at(int x, int y) const
 {
-	if (m_root == NULL)
-		return NULL;
+	if (m_root == nullptr)
+		return nullptr;
 	else
 		return m_root->at(x, y);
 }
 
 Node * QuadTree::access(int x, int y)
 {
-	if (m_root == NULL)
-		return NULL;
+	if (m_root == nullptr)
+		return nullptr;
 	else
 		return m_root->access(x, y);
 }
@@ -54,7 +54,7 @@ Node * QuadTree::access(int x, int y)
 void QuadTree::clear(void)
 {
 	delete m_root;
-	m_root = NULL;
+	m_root = nullptr;
 	m_size = 0;
 }
 
@@ -65,7 +65,7 @@ unsigned QuadTree::size(void) const
 
 Trect<double> QuadTree::boundary(void) const
 {
-	if (m_root == NULL)
+	if (m_root == nullptr)
 		return Trect<double>();
 	return m_root->m_boundary;
 }
@@ -76,7 +76,7 @@ void QuadTree::SaveToFile(const std::string & file_name)
 	if (!file.is_open())
 		throw file_name + " cannot be opened.";
 
-	if (m_root != NULL)
+	if (m_root != nullptr)
 	{
 		file << *m_root;
 	}
@@ -93,10 +93,10 @@ void QuadTree::LoadFromFile(const std::string & file_name)
 
 	std::ifstream file(file_name);
 
-	if (m_root != NULL)
+	if (m_root != nullptr)
 	{
 		delete m_root;
-		m_root = NULL;
+		m_root = nullptr;
 		m_size = 0;
 	}
 

@@ -29,7 +29,7 @@ public:
 	float jumpAccel = -1.0f;
 
 
-	void doJump(const QuadTree & terrain) {
+	void do_jump(const QuadTree & terrain) {
 		v2d acc (0.0, 0.0);
 		v2d vel (0.0, 0.0);
 
@@ -65,7 +65,8 @@ public:
 		m_acc.y = acc.y;
 	}
 
-	void update(float deltaTime) {
+	void update(float deltaTime)
+	{
 		
 	}
 

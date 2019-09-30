@@ -13,18 +13,18 @@ bool Keyboard::PollEvent(void)
 
 bool Keyboard::KeyIsPressed(const SDL_Scancode & scan_code)
 {
-	const Uint8 * keystate = SDL_GetKeyboardState(NULL);
+	const Uint8 * keystate = SDL_GetKeyboardState(nullptr);
 	//continuous-response keys
-	if (keystate != NULL)
+	if (keystate != nullptr)
 		return keystate[scan_code];
 	return false;
 }
 
 bool Keyboard::KeyWasPressedOnce(const SDL_Keycode & key_code)
 {
-	const Uint8 * keystate = SDL_GetKeyboardState(NULL);
+	const Uint8 * keystate = SDL_GetKeyboardState(nullptr);
 	// non-continuous response keys
-	if (keystate != NULL)
+	if (keystate != nullptr)
 		return keystate[key_code];
 	return false;
 }

@@ -14,7 +14,7 @@ Player::Player(Image * img)
 
 Player::~Player(void)
 {
-	m_player_img = NULL;
+	m_player_img = nullptr;
 }
 
 void Player::Update(const QuadTree & terrain)

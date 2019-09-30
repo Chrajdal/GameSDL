@@ -102,11 +102,11 @@ struct Trect
 		return true;
 	}
 
-	T Width(void)const noexcept
+	auto Width(void)const noexcept
 	{
 		return (T)std::fabs(m_downright.m_x - m_upleft.m_x);
 	}
-	T Height(void)const noexcept
+	auto Height(void)const noexcept
 	{
 		return (T)std::fabs(m_downright.m_y - m_upleft.m_y);
 	}

@@ -2,12 +2,12 @@
 
 Node::Node(int x, int y, const tile_type & ttile, const Trect<double> & boundary)
 	: m_x(x), m_y(y),
-	m_nw(NULL), m_ne(NULL), m_sw(NULL), m_se(NULL),
+	m_nw(nullptr), m_ne(nullptr), m_sw(nullptr), m_se(nullptr),
 	m_tile(ttile), m_boundary(boundary)
 {}
 Node::Node(const Node & src)
 	: m_x(src.m_x), m_y(src.m_y),
-	m_nw(NULL), m_ne(NULL), m_sw(NULL), m_se(NULL),
+	m_nw(nullptr), m_ne(nullptr), m_sw(nullptr), m_se(nullptr),
 	m_tile(src.m_tile),
 	m_boundary(src.m_boundary)
 {}
@@ -19,10 +19,10 @@ Node & Node::operator = (const Node & src)
 
 	delete m_nw; delete m_ne; delete m_sw; delete m_se;
 
-	m_nw = NULL;
-	m_ne = NULL;
-	m_sw = NULL;
-	m_se = NULL;
+	m_nw = nullptr;
+	m_ne = nullptr;
+	m_sw = nullptr;
+	m_se = nullptr;
 	m_tile = src.m_tile;
 	m_x = src.m_x;
 	m_y = src.m_y;
@@ -49,7 +49,7 @@ bool Node::insert(const Node & n)
 	{
 		if (n.m_y < middle.m_y) // NORTH
 		{
-			if (m_nw == NULL)
+			if (m_nw == nullptr)
 			{
 				m_nw = new Node(n.m_x, n.m_y, n.m_tile, { m_boundary.m_upleft, middle });
 				return true;
@@ -59,7 +59,7 @@ bool Node::insert(const Node & n)
 		}
 		else // SOUTH
 		{
-			if (m_sw == NULL)
+			if (m_sw == nullptr)
 			{
 				m_sw = new Node(n.m_x, n.m_y, n.m_tile,
 					{ { m_boundary.m_upleft.m_x, middle.m_y },
@@ -74,7 +74,7 @@ bool Node::insert(const Node & n)
 	{
 		if (n.m_y < middle.m_y) // NORTH
 		{
-			if (m_ne == NULL)
+			if (m_ne == nullptr)
 			{
 				m_ne = new Node(n.m_x, n.m_y, n.m_tile,
 					{ { middle.m_x, m_boundary.m_upleft.m_y },
@@ -87,7 +87,7 @@ bool Node::insert(const Node & n)
 		}
 		else // SOUTH
 		{
-			if (m_se == NULL)
+			if (m_se == nullptr)
 			{
 				m_se = new Node(n.m_x, n.m_y, n.m_tile, { middle, m_boundary.m_downright });
 				return true;
@@ -103,22 +103,22 @@ void Node::range(std::vector<const Node *> & PointsInRange, const Trect<double> 
 	if (range.contains(m_x, m_y))
 		PointsInRange.push_back(this);
 
-	if (m_nw != NULL)
+	if (m_nw != nullptr)
 	{
 		if (range.CheckCollide(m_nw->m_boundary))
 			m_nw->range(PointsInRange, range);
 	}
-	if (m_ne != NULL)
+	if (m_ne != nullptr)
 	{
 		if (range.CheckCollide(m_ne->m_boundary))
 			m_ne->range(PointsInRange, range);
 	}
-	if (m_sw != NULL)
+	if (m_sw != nullptr)
 	{
 		if (range.CheckCollide(m_sw->m_boundary))
 			m_sw->range(PointsInRange, range);
 	}
-	if (m_se != NULL)
+	if (m_se != nullptr)
 	{
 		if (range.CheckCollide(m_se->m_boundary))
 			m_se->range(PointsInRange, range);
@@ -131,28 +131,28 @@ const Node * Node::at(int x, int y) const
 		return this;
 	if (m_boundary.contains(x, y))
 	{
-		if (m_nw != NULL)
+		if (m_nw != nullptr)
 		{
 			if (m_nw->m_boundary.contains(x, y))
 				return m_nw->access(x, y);
 		}
-		if (m_ne != NULL)
+		if (m_ne != nullptr)
 		{
 			if (m_ne->m_boundary.contains(x, y))
 				return m_ne->access(x, y);
 		}
-		if (m_sw != NULL)
+		if (m_sw != nullptr)
 		{
 			if (m_sw->m_boundary.contains(x, y))
 				return m_sw->access(x, y);
 		}
-		if (m_se != NULL)
+		if (m_se != nullptr)
 		{
 			if (m_se->m_boundary.contains(x, y))
 				return m_se->access(x, y);
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 Node * Node::access(int x, int y)
@@ -161,26 +161,26 @@ Node * Node::access(int x, int y)
 		return this;
 	if (m_boundary.contains(x, y))
 	{
-		if (m_nw != NULL)
+		if (m_nw != nullptr)
 		{
 			if (m_nw->m_boundary.contains(x, y))
 				return m_nw->access(x, y);
 		}
-		if (m_ne != NULL)
+		if (m_ne != nullptr)
 		{
 			if (m_ne->m_boundary.contains(x, y))
 				return m_ne->access(x, y);
 		}
-		if (m_sw != NULL)
+		if (m_sw != nullptr)
 		{
 			if (m_sw->m_boundary.contains(x, y))
 				return m_sw->access(x, y);
 		}
-		if (m_se != NULL)
+		if (m_se != nullptr)
 		{
 			if (m_se->m_boundary.contains(x, y))
 				return m_se->access(x, y);
 		}
 	}
-	return NULL;
+	return nullptr;
 }
