@@ -1,6 +1,6 @@
 #pragma once
 
-enum tile_type
+enum class tile_type
 {
-	air, dirt, stone
+	air = 0, dirt = 1, stone = 2
 };

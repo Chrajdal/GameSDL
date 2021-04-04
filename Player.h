@@ -26,8 +26,17 @@ public:
 	float timeInAir = 0.0f;
 	float jumpImpulseTime = 0.2f;
 	float jumpImpulseVel = -10.0f;
-	float jumpAccel = -1.0f;
+	float jumpAccel = -0.3f;
 
+	bool stands_on_ground(const QuadTree& terrain)
+	{
+		Trect <double> floor_box = { m_pos.x, m_pos.y + m_bbox.Height(), m_pos.x + m_bbox.Width() , m_pos.y + m_bbox.Height() + 1 };
+		std::vector<const Node*> floor = terrain.range(floor_box);
+		for (const auto& i : floor)
+			if (i->m_tile != tile_type::air)
+				return true;
+		return false;
+	}
 
 	void do_jump(const QuadTree & terrain) {
 		v2d acc (0.0, 0.0);

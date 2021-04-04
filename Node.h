@@ -27,12 +27,12 @@ public:
 		if (src.m_sw != nullptr) os << *src.m_sw;
 		if (src.m_se != nullptr) os << *src.m_se;
 
-		return os << src.m_x << " " << src.m_y << " " << src.m_tile << " # ";
+		return os << src.m_x << " " << src.m_y << " " << (int)src.m_tile << " # ";
 	}
 
 	int m_x;
 	int m_y;
 	Node * m_nw, *m_ne, *m_sw, *m_se;
-	/*mutable*/ Trect<double> m_boundary;
+	Trect<double> m_boundary;
 	tile_type m_tile;
 };

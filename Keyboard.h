@@ -17,4 +17,3 @@ public:
 	static const SDL_Scancode Left = SDL_SCANCODE_A;
 	static const SDL_Scancode Right = SDL_SCANCODE_D;
 };
-

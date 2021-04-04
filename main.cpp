@@ -2,22 +2,17 @@
 #include <thread>
 #include <SDL.h>
 #include "Utils.h"
-//#include <SDL_ttf.h>
 #undef main
 
 #pragma comment (lib, "SDL2.lib")
 #pragma comment (lib, "SDL2main.lib")
 #pragma comment (lib, "SDL2_image.lib")
-//#pragma comment (lib, "SDL2_ttf.lib")
 
 #include "Game.h"
 
-
 int main(void)
 {
-	
 	Game TheGame;
-
 	while (TheGame.IsRunning() == true)
 	{
 		CTimer frame_timer;
@@ -33,8 +28,6 @@ int main(void)
 		}
 	}
 	
-
-	//TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 

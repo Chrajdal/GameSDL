@@ -3,26 +3,26 @@
 class Color
 {
 public:
-	unsigned int dword;
+	uint32_t dword= 0;
 public:
-	constexpr Color() : dword() {}
+	constexpr Color() : dword(0) {}
 	constexpr Color(const Color& col)
 		:
 		dword(col.dword)
 	{}
-	constexpr Color(unsigned int dw)
+	constexpr Color(uint32_t dw)
 		:
 		dword(dw)
 	{}
-	constexpr Color(unsigned char x, unsigned char r, unsigned char g, unsigned char b)
+	constexpr Color(uint8_t x, uint8_t r, uint8_t g, uint8_t b)
 		:
 		dword((x << 24u) | (r << 16u) | (g << 8u) | b)
 	{}
-	constexpr Color(unsigned char r, unsigned char g, unsigned char b)
+	constexpr Color(uint8_t r, uint8_t g, uint8_t b)
 		:
 		dword((r << 16u) | (g << 8u) | b)
 	{}
-	constexpr Color(Color col, unsigned char x)
+	constexpr Color(Color col, uint8_t x)
 		:
 		Color((x << 24u) | col.dword)
 	{}
@@ -31,54 +31,62 @@ public:
 		dword = color.dword;
 		return *this;
 	}
-	constexpr unsigned char GetX() const
-	{
-		return dword >> 24u;
-	}
-	constexpr unsigned char GetA() const
-	{
-		return GetX();
-	}
-	constexpr unsigned char GetR() const
-	{
-		return (dword >> 16u) & 0xFFu;
-	}
-	constexpr unsigned char GetG() const
-	{
-		return (dword >> 8u) & 0xFFu;
-	}
-	constexpr unsigned char GetB() const
+	constexpr uint8_t GetX() const
 	{
 		return dword & 0xFFu;
 	}
-	void SetX(unsigned char x)
+	constexpr uint8_t GetA() const
 	{
-		dword = (dword & 0xFFFFFFu) | (x << 24u);
+		return GetX();
 	}
-	void SetA(unsigned char a)
+	constexpr uint8_t GetR() const
+	{
+		return (dword >> 24u) & 0xFFu;
+	}
+	constexpr uint8_t GetG() const
+	{
+		return (dword >> 16u) & 0xFFu;
+	}
+	constexpr uint8_t GetB() const
+	{
+		return (dword >> 8u) & 0xFFu;
+	}
+	void SetR(uint8_t r)
+	{
+		dword = (dword & 0xFFFFFFu) | (r << 24u);
+	}
+	void SetA(uint8_t a)
 	{
 		SetX(a);
 	}
-	void SetR(unsigned char r)
+	void SetG(uint8_t g)
 	{
-		dword = (dword & 0xFF00FFFFu) | (r << 16u);
+		dword = (dword & 0xFF00FFFFu) | (g << 16u);
 	}
-	void SetG(unsigned char g)
+	void SetB(uint8_t b)
 	{
-		dword = (dword & 0xFFFF00FFu) | (g << 8u);
+		dword = (dword & 0xFFFF00FFu) | (b << 8u);
 	}
-	void SetB(unsigned char b)
+	void SetX(uint8_t x)
 	{
-		dword = (dword & 0xFFFFFF00u) | b;
+		dword = (dword & 0xFFFFFF00u) | x;
 	}
 };
 
 namespace Colors
 {
-	static constexpr Color MakeRGB(unsigned char r, unsigned char g, unsigned char b)
+	static constexpr Color MakeRGB(uint8_t r, uint8_t g, uint8_t b)
 	{
-		return (r << 16) | (g << 8) | b;
+		uint8_t a = 0xFFu;
+		return (r << 24) | (g << 16) | (b << 8) | a;
+		//return (Color)((r << 16) | (g << 8) | b);
 	}
+
+	static constexpr Color MakeRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+	{
+		return (r << 24) | (g << 16) | (b << 8) | a;
+	}
+
 	static constexpr Color White = MakeRGB(255u, 255u, 255u);
 	static constexpr Color Black = MakeRGB(0u, 0u, 0u);
 	static constexpr Color Gray = MakeRGB(0x80u, 0x80u, 0x80u);

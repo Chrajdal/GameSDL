@@ -1,5 +1,7 @@
 #include "Game.h"
 
+
+
 QuadTree terrain;
 Image tile_sheet_dirt;
 Image tile_sheet_stone;
@@ -72,9 +74,18 @@ void Game::Go()
 {
 	gfx.BeginFrame();
 
-	if(m_IsRunning) HandleInput();
-	if(m_IsRunning) UpdateModel();
-	if(m_IsRunning) ComposeFrame();
+	if (m_IsRunning)
+	{
+		HandleInput();
+	}
+	if (m_IsRunning)
+	{
+		//UpdateModel();
+	}
+	if (m_IsRunning)
+	{
+		ComposeFrame();
+	}
 
 	gfx.EndFrame();
 }
@@ -97,18 +108,21 @@ void Game::HandleInput()
 	}
 
 	double step = 2e-1; // will be changed to player.m_vel;
-	if (kbd.KeyIsPressed(SDL_SCANCODE_SPACE) && player.m_curr_state != Player::PlayerState::jump)
+	if (kbd.KeyIsPressed(SDL_SCANCODE_SPACE) and player.m_curr_state != Player::PlayerState::jump)
 	{
-		player.do_jump(terrain);
+		if(player.stands_on_ground(terrain))
+		{
+			player.do_jump(terrain);
+			player.m_vel = player.m_vel + (10 * step * 0.1);
 
-		player.m_vel = player.m_vel + (10 * step * 0.1);
+			// Clamp to maximum velocity
+			player.m_vel.x = std::min(10 * step, std::max(player.m_vel.x, -10 * step));
+			player.m_vel.y = std::min(10 * step, std::max(player.m_vel.y, -10 * step));
 
-		// Clamp to maximum velocity
-		player.m_vel.x = std::min(10*step, std::max(player.m_vel.x, -10 * step));
-		player.m_vel.y = std::min(10 * step, std::max(player.m_vel.y, -10 * step));
-
-		//player.ApplyForce(v2d(0, -10 *step));
-		//player.m_curr_state = Player::PlayerState::jump;
+			//player.ApplyForce(v2d(0, -10 *step));
+			//player.m_curr_state = Player::PlayerState::jump;
+		}
+		
 	}
 	if (kbd.KeyIsPressed(SDL_SCANCODE_LEFT) || kbd.KeyIsPressed(SDL_SCANCODE_A))
 	{
@@ -155,8 +169,8 @@ void Game::HandleInput()
 	cam.m_pos.x = (player.m_pos.x + player.m_bbox.Width() / 2) * tile_size - gfx.ScreenWidth / 2;
 	cam.m_pos.y = (player.m_pos.y + player.m_bbox.Height() / 2)* tile_size - gfx.ScreenHeight / 2;
 
-	//SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
-	//while (SDL_PollEvent(&e));
+	SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
+	while (SDL_PollEvent(&e));
 }
 
 void Game::UpdateModel()
@@ -257,6 +271,17 @@ Trect<int> const & pick_correct_tile_rect(int x, int y, const QuadTree & terrain
 
 void Game::ComposeFrame()
 {
+	gfx.DrawRect(20, 20, 100, 100, Colors::Gray);
+	gfx.DrawCircle(500, 500, 150, Colors::Green);
+
+	gfx.DrawRect(50, 50, 150, 150, Colors::MakeRGBA(0x53u, 0x3eu, 0x2du, 0xff));
+
+	gfx.DrawRect(55, 55, 150, 150, Colors::MakeRGBA(0xdd, 0xca, 0x7d, 0xff));
+	
+
+
+	return;
+
 	// offset view by cam
 	Trect<double> view(
 		{ 0 + cam.m_pos.x - tile_size,0 + cam.m_pos.y - tile_size },
@@ -333,11 +358,8 @@ void Game::ComposeFrame()
 	rect.m_upleft.m_y = rect.m_upleft.m_y * tile_size - std::round(cam.m_pos.y);
 	rect.m_downright.m_x = rect.m_downright.m_x * tile_size - std::round(cam.m_pos.x);
 	rect.m_downright.m_y = rect.m_downright.m_y * tile_size - std::round(cam.m_pos.y);
-	gfx.DrawRect(rect.m_upleft.m_x, rect.m_upleft.m_y, rect.Width(), rect.Height() , Colors::Yellow);
+	gfx.DrawRect((int)rect.m_upleft.m_x, (int)rect.m_upleft.m_y, rect.Width(), rect.Height() , Colors::Yellow);
 
-	//std::cout << "Play m_pos: " << player_pos.x << ", " << player_pos.y << '\n';
-	//std::cout << "real m_pos: " << player.m_pos.x << ", " << player.m_pos.y << '\n';
-	
 	/**/
 	//gfx.DrawLine(0, 0, gfx.ScreenWidth - 1, gfx.ScreenHeight - 1, Colors::Red);
 	//gfx.DrawLine(gfx.ScreenWidth - 1, 0, 0, gfx.ScreenHeight - 1, Colors::Red);

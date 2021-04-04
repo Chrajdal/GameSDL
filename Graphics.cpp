@@ -124,7 +124,9 @@ void Graphics::DrawLine(unsigned x1, unsigned y1, unsigned x2, unsigned y2, cons
 
 void Graphics::DrawCircle(int _x, int _y, int radius, const Color & c)
 {
-	int x = radius - 1;
+	circleRGBA(ren, _x, _y, radius, c.GetR(), c.GetG(), c.GetB(), c.GetA());
+
+	/*int x = radius - 1;
 	int y = 0;
 	int dx = 1;
 	int dy = 1;
@@ -151,15 +153,17 @@ void Graphics::DrawCircle(int _x, int _y, int radius, const Color & c)
 			dx += 2;
 			err += (-radius << 1) + dx;
 		}
-	}
+	}*/
 }
 
 void Graphics::DrawRect(int x, int y, int w, int h, const Color & color)
 {
-	DrawLine(x, y, x + w, y, color);
-	DrawLine(x + w, y, x + w, y + h, color);
-	DrawLine(x, y, x, y + h, color);
-	DrawLine(x, y + h, x + w, y + h, color);
+	rectangleRGBA(ren, x, y, x + w, y + h, color.GetR(), color.GetG(), color.GetB(), color.GetA());
+
+	//DrawLine(x, y, x + w, y, color);
+	//DrawLine(x + w, y, x + w, y + h, color);
+	//DrawLine(x, y, x, y + h, color);
+	//DrawLine(x, y + h, x + w, y + h, color);
 }
 
 void Graphics::DrawImage(int x, int y, const Image & img)

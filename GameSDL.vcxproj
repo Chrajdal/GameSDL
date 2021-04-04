@@ -42,14 +42,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -77,6 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\include;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\include;C:\SDL2\SDL2_image-2.0.3\include;C:\SDL2\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\lib;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\lib;C:\SDL2\SDL2_image-2.0.3\lib\x64;C:\SDL2\SDL2-2.0.8\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -91,9 +92,10 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\SDL2_ttf-2.0.14\include;$(SolutionDir)\SDL2_image-2.0.3\include;$(SolutionDir)\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_ttf-2.0.14\lib;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\lib;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\lib;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2-2.0.8\lib;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2_image-2.0.3\lib;C:\SDL2\SDL2_image-2.0.3\lib\x64;C:\SDL2\SDL2-2.0.8\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\SDL2-2.0.8\lib;$(SolutionDir)\SDL2_image-2.0.3\lib\x64;$(SolutionDir)\SDL2_ttf-2.0.14\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -107,6 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\include;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\include;C:\SDL2\SDL2_image-2.0.3\include;C:\SDL2\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -124,12 +127,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_ttf-2.0.14\include;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2-2.0.8\include;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2_image-2.0.3\include;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\include;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\include;C:\SDL2\SDL2_image-2.0.3\include;C:\SDL2\SDL2-2.0.8\include;$(SolutionDir)\SDL2_ttf-2.0.14\include;$(SolutionDir)\SDL2_image-2.0.3\include;$(SolutionDir)\SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SDL2_ttf-2.0.14\include;$(SolutionDir)SDL2_image-2.0.3\include;$(SolutionDir)SDL2-2.0.8\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_ttf-2.0.14\lib;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2-2.0.8\lib;C:\Users\Eliška\Desktop\Honzik\GameSDL\SDL2_image-2.0.3\lib;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2_image-2.0.3\lib;C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\SDL2-2.0.8\lib;C:\SDL2\SDL2_image-2.0.3\lib\x64;C:\SDL2\SDL2-2.0.8\lib;$(SolutionDir)\SDL2_image-2.0.3\lib;$(SolutionDir)\SDL2_ttf-2.0.14\lib;$(SolutionDir)\SDL2-2.0.8\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)SDL2_image-2.0.3\lib;$(SolutionDir)SDL2_ttf-2.0.14\lib;$(SolutionDir)SDL2-2.0.8\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -148,6 +152,10 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="Random.cpp" />
+    <ClCompile Include="SDL2_framerate.c" />
+    <ClCompile Include="SDL2_gfxPrimitives.c" />
+    <ClCompile Include="SDL2_imageFilter.c" />
+    <ClCompile Include="SDL2_rotozoom.c" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
@@ -163,9 +171,15 @@
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="MovingEntity.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="olcEngine.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="QuadTree.h" />
     <ClInclude Include="Random.h" />
+    <ClInclude Include="SDL2_framerate.h" />
+    <ClInclude Include="SDL2_gfxPrimitives.h" />
+    <ClInclude Include="SDL2_gfxPrimitives_font.h" />
+    <ClInclude Include="SDL2_imageFilter.h" />
+    <ClInclude Include="SDL2_rotozoom.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
