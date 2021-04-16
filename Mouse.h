@@ -31,7 +31,7 @@ public:
 
 	inline auto GetPos(void) const
 	{
-		std::make_pair(x, y);
+		return std::make_pair(x, y);
 	}
 
 	inline bool LeftIsPressed(void)const

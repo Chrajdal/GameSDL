@@ -39,7 +39,6 @@ private:
 	Keyboard kbd;
 	bool m_IsRunning;
 
-	Camera cam;
-
+	Random rnd;
 	CTimer timer;
 };

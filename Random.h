@@ -1,15 +1,46 @@
 #pragma once
 
+#include <cstdint>
+#include <vector>
+#include <cmath>
 #include <random>
-#include <ctime>
+#include <stdexcept>
 
-class Random
+class IRandom
 {
-	std::mt19937 rng;
 public:
-	Random(uint_least32_t seed = time(nullptr));
+	virtual ~IRandom() = default;
 
-	int32_t next(int32_t minval = std::numeric_limits<int32_t>::min(), int32_t maxval = std::numeric_limits<int32_t>::max());
-	float_t next_float(float_t minval = std::numeric_limits<float_t>::min(), float_t maxval = std::numeric_limits<float_t>::max());
-	double_t next_double(double_t minval = std::numeric_limits<double_t>::min(), double_t maxval = std::numeric_limits<double_t>::max());
+	virtual std::int32_t Next() = 0;
+
+	virtual std::int32_t Next(std::int32_t maxValue) = 0;
+
+	virtual std::int32_t Next(std::int32_t minValue, std::int32_t maxValue) = 0;
+
+	virtual std::double_t NextDouble() = 0;
+
+	virtual std::double_t NextDouble(std::double_t minValue, std::double_t maxValue) = 0;
+
+	virtual std::float_t NextFloat() = 0;
+
+	virtual std::float_t NextFloat(std::float_t minValue, std::float_t maxValue) = 0;
+
+	virtual void NextBytes(std::vector<std::uint8_t>& buffer) = 0;
+};
+
+class Random : public IRandom
+{
+	std::mt19937 randomNumberGenerator;
+	std::uniform_int_distribution<std::int32_t> byteDistribution;
+public:
+	Random(std::uint_least32_t seed);
+	Random() : Random(std::_Random_device()) {};
+	std::int32_t Next() override;
+	std::int32_t Next(std::int32_t maxValue) override;
+	std::int32_t Next(std::int32_t minValue, std::int32_t maxValue) override;
+	std::double_t NextDouble() override;
+	std::double_t NextDouble(std::double_t minValue, std::double_t maxValue) override;
+	std::float_t NextFloat() override;
+	std::float_t NextFloat(std::float_t minValue, std::float_t maxValue) override;
+	void NextBytes(std::vector<std::uint8_t>& buffer) override;
 };
