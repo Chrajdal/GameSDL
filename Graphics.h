@@ -8,9 +8,8 @@
 #include <string>
 #include <iostream>
 
-
-
 #include "Color.h"
+#include "Utils.h"
 
 class Graphics;
 
@@ -40,9 +39,14 @@ public:
 
 	void PutPixel(unsigned x, unsigned y, const Color & color);
 	void DrawLine(unsigned x1, unsigned y1, unsigned x2, unsigned y2, const Color & color);
+	void DrawThickLine(unsigned width, unsigned x1, unsigned y1, unsigned x2, unsigned y2, const Color& color);
+
 	void DrawCircle(int _x, int _y, int radius, const Color & c);
 	void DrawFilledCircle(int x, int y, int r, const Color& color);
 	void DrawRect(int rx, int ry, int w, int h, const Color & color);
+	void DrawFilledCircle(int _x, int _y, int radius, const Color& c);
+	void DrawFilledRect(int rx, int ry, int w, int h, const Color& color);
+	void DrawCubicBezierCurve(const std::vector<Tpoint<float>> & points, const Color & color);
 
 
 	void DrawImage(int x, int y, const Image & img);

@@ -10,7 +10,7 @@ public:
 		:
 		dword(col.dword)
 	{}
-	constexpr Color(uint32_t dw)
+	constexpr Color(uint32_t dw = 0)
 		:
 		dword(dw)
 	{}
@@ -81,16 +81,14 @@ public:
 
 namespace Colors
 {
-	static constexpr Color MakeRGB(uint8_t r, uint8_t g, uint8_t b)
+	inline static constexpr Color MakeRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a) noexcept
 	{
-		uint8_t a = 0xFFu;
 		return (r << 24) | (g << 16) | (b << 8) | a;
-		//return (Color)((r << 16) | (g << 8) | b);
 	}
 
-	static constexpr Color MakeRGBA(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+	inline static constexpr Color MakeRGB(uint8_t r, uint8_t g, uint8_t b) noexcept
 	{
-		return (r << 24) | (g << 16) | (b << 8) | a;
+		return MakeRGBA(r, g, b, (uint8_t)0xff);
 	}
 
 	static constexpr Color White = MakeRGB(255u, 255u, 255u);

@@ -66,8 +66,8 @@ Graphics::Graphics(void)
 	if (SDL_GetDesktopDisplayMode(0, &dm) != 0)
 		SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
 
-	ScreenHeight = dm.h;
-	ScreenWidth = dm.w;
+	//ScreenHeight = dm.h;
+	//ScreenWidth = dm.w;
 
 	ScreenHeight = 512 + 256;
 	ScreenWidth = 512 + 256;
@@ -110,14 +110,19 @@ void Graphics::EndFrame(void)
 	SDL_RenderPresent(ren);
 }
 
-void Graphics::PutPixel(unsigned x, unsigned y, const Color & color)
+void Graphics::PutPixel(unsigned x, unsigned y, const Color & c)
 {
-	pixelColor(ren, x, y, color);
+	pixelRGBA(ren, x, y, c.GetR(), c.GetG(), c.GetB(), c.GetA());
 }
 
-void Graphics::DrawLine(unsigned x1, unsigned y1, unsigned x2, unsigned y2, const Color & color)
+void Graphics::DrawLine(unsigned x1, unsigned y1, unsigned x2, unsigned y2, const Color & c)
 {
-	lineColor(ren, x1, y1, x2, y2, color);
+	lineRGBA(ren, x1, y1, x2, y2, c.GetR(), c.GetG(), c.GetB(), c.GetA());
+}
+
+void Graphics::DrawThickLine(unsigned width, unsigned x1, unsigned y1, unsigned x2, unsigned y2, const Color& color)
+{
+
 }
 
 void Graphics::DrawCircle(int _x, int _y, int radius, const Color & c)
@@ -125,14 +130,72 @@ void Graphics::DrawCircle(int _x, int _y, int radius, const Color & c)
 	circleRGBA(ren, _x, _y, radius, c.GetR(), c.GetG(), c.GetB(), c.GetA());
 }
 
-void Graphics::DrawFilledCircle(int x, int y, int r, const Color& color)
-{
-	filledCircleColor(ren, x, y, r, color);
-}
-
 void Graphics::DrawRect(int x, int y, int w, int h, const Color & color)
 {
 	rectangleRGBA(ren, x, y, x + w, y + h, color.GetR(), color.GetG(), color.GetB(), color.GetA());
+}
+
+void Graphics::DrawFilledCircle(int _x, int _y, int radius, const Color& c)
+{
+	filledCircleRGBA(ren, _x, _y, radius, c.GetR(), c.GetG(), c.GetB(), c.GetA());
+}
+
+void Graphics::DrawFilledRect(int x, int y, int w, int h, const Color& c)
+{
+	//rectangleRGBA(ren, x, y, x + w, y + h, c.GetR(), c.GetG(), c.GetB(), c.GetA());
+	const Sint16 _x[4] = { x, x + w, x + w,x };
+	const Sint16 _y[4] = { y, y, y + h,y + h };
+
+	filledPolygonRGBA(ren, _x, _y, 4, c.GetR(), c.GetG(), c.GetB(), c.GetA());
+}
+
+void Graphics::DrawCubicBezierCurve(const std::vector<Tpoint<float>>& points, const Color& c)
+{
+	//De Casteljau's algorithm
+	{
+		if (points.size() < 4)
+			return;
+		auto pointLerp = [](const Tpoint<float>& a, const Tpoint<float>& b, const float& t) {
+			auto px = std::lerp(a.m_x, b.m_x, t);
+			auto py = std::lerp(a.m_y, b.m_y, t);
+			return Tpoint<float>(px, py);
+		};
+		Tpoint<float> prev = points[0];
+		for (float t = 0.0; t <= 1.0; t += .01)
+		{
+			auto p0 = points[0], p1 = points[1], p2 = points[2], p3 = points[3];
+			auto p01 = pointLerp(p0, p1, t);
+			auto p12 = pointLerp(p1, p2, t);
+			auto p23 = pointLerp(p2, p3, t);
+			auto p012 = pointLerp(p01, p12, t);
+			auto p123 = pointLerp(p12, p23, t);
+			auto p0123 = pointLerp(p012, p123, t);
+
+			DrawLine(prev.m_x, prev.m_y, p0123.m_x, p0123.m_y, c);
+			prev = p0123;
+		}
+		DrawLine(prev.m_x, prev.m_y, points.crbegin()->m_x, points.crbegin()->m_y, c);
+	}
+
+	return;
+
+	//Bernstein polynomial implementation
+	{
+		double xu = 0.0, yu = 0.0, u = 0.0;
+		int i = 0;
+		std::pair<int, int> prev = { points.begin()->m_x, points.begin()->m_y };
+		for (u = 0.0; u <= 1.0; u += 0.01)
+		{
+			xu = pow(1 - u, 3) * points[0].m_x + 3 * u * pow(1 - u, 2) * points[1].m_x + 3 * pow(u, 2) * (1 - u) * points[2].m_x
+				+ pow(u, 3) * points[3].m_x;
+			yu = pow(1 - u, 3) * points[0].m_y + 3 * u * pow(1 - u, 2) * points[1].m_y + 3 * pow(u, 2) * (1 - u) * points[2].m_y
+				+ pow(u, 3) * points[3].m_y;
+			//PutPixel((int)xu, (int)yu, c);
+			DrawLine(xu, yu, prev.first, prev.second, c);
+			prev = { xu, yu };
+		}
+		DrawLine(prev.first, prev.second, points.crbegin()->m_x, points.crbegin()->m_y, c);
+	}
 }
 
 void Graphics::DrawImage(int x, int y, const Image & img)

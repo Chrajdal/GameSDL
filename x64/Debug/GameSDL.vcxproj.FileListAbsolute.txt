@@ -1,3 +1,4 @@
 C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\x64\Debug\GameSDL.exe
 C:\Users\janch\Desktop\C++stuff\GameSDL\GameSDL\x64\Debug\GameSDL.pdb
 C:\Users\janch\OneDrive\Plocha\C++stuff\GameSDL\GameSDL\x64\Debug\GameSDL.exe
+C:\Users\Eliška\Desktop\Honzik\GameSDL-master\x64\Debug\GameSDL.exe
