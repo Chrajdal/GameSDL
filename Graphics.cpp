@@ -112,58 +112,27 @@ void Graphics::EndFrame(void)
 
 void Graphics::PutPixel(unsigned x, unsigned y, const Color & color)
 {
-	SDL_SetRenderDrawColor(ren, color.GetR(), color.GetG(), color.GetB(), color.GetA());
-	SDL_RenderDrawPoint(ren, x, y);
+	pixelColor(ren, x, y, color);
 }
 
 void Graphics::DrawLine(unsigned x1, unsigned y1, unsigned x2, unsigned y2, const Color & color)
 {
-	SDL_SetRenderDrawColor(ren, color.GetR(), color.GetG(), color.GetB(), color.GetA());
-	SDL_RenderDrawLine(ren, x1, y1, x2, y2);
+	lineColor(ren, x1, y1, x2, y2, color);
 }
 
 void Graphics::DrawCircle(int _x, int _y, int radius, const Color & c)
 {
 	circleRGBA(ren, _x, _y, radius, c.GetR(), c.GetG(), c.GetB(), c.GetA());
+}
 
-	/*int x = radius - 1;
-	int y = 0;
-	int dx = 1;
-	int dy = 1;
-	int err = dx - (radius << 1);
-	while (x >= y)
-	{
-		PutPixel(_x + x, _y + y, c);
-		PutPixel(_x + y, _y + x, c);
-		PutPixel(_x - y, _y + x, c);
-		PutPixel(_x - x, _y + y, c);
-		PutPixel(_x - x, _y - y, c);
-		PutPixel(_x - y, _y - x, c);
-		PutPixel(_x + y, _y - x, c);
-		PutPixel(_x + x, _y - y, c);
-		if (err <= 0)
-		{
-			y++;
-			err += dy;
-			dy += 2;
-		}
-		if (err > 0)
-		{
-			x--;
-			dx += 2;
-			err += (-radius << 1) + dx;
-		}
-	}*/
+void Graphics::DrawFilledCircle(int x, int y, int r, const Color& color)
+{
+	filledCircleColor(ren, x, y, r, color);
 }
 
 void Graphics::DrawRect(int x, int y, int w, int h, const Color & color)
 {
 	rectangleRGBA(ren, x, y, x + w, y + h, color.GetR(), color.GetG(), color.GetB(), color.GetA());
-
-	//DrawLine(x, y, x + w, y, color);
-	//DrawLine(x + w, y, x + w, y + h, color);
-	//DrawLine(x, y, x, y + h, color);
-	//DrawLine(x, y + h, x + w, y + h, color);
 }
 
 void Graphics::DrawImage(int x, int y, const Image & img)
@@ -199,9 +168,3 @@ void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int 
 
 	SDL_RenderCopy(ren, img.GetData(), &src, &m_pos);
 }
-
-//void Graphics::DrawFont(int x, int y, const Font & font)
-//{
-//	
-//}
-

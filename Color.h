@@ -71,6 +71,12 @@ public:
 	{
 		dword = (dword & 0xFFFFFF00u) | x;
 	}
+
+
+	operator uint32_t() const
+	{
+		return dword;
+	}
 };
 
 namespace Colors

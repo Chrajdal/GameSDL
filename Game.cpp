@@ -1,7 +1,5 @@
 #include "Game.h"
 
-
-
 QuadTree terrain;
 Image tile_sheet_dirt;
 Image tile_sheet_stone;
@@ -80,7 +78,7 @@ void Game::Go()
 	}
 	if (m_IsRunning)
 	{
-		//UpdateModel();
+		UpdateModel();
 	}
 	if (m_IsRunning)
 	{
@@ -94,7 +92,7 @@ void Game::HandleInput()
 {
 	SDL_Event e;
 	SDL_PollEvent(&e);
-	//mouse.SetMouseState(e);
+	mouse.SetMouseState(e);
 	
 	// keyboard code
 	if (kbd.KeyIsPressed(SDL_SCANCODE_ESCAPE))
@@ -142,7 +140,7 @@ void Game::HandleInput()
 		selected_tile = tile_type::stone;
 	}
 	
-	mouse.SetMouseState(e);
+	//mouse.SetMouseState(e);
 	// mouse code
 	{
 		int x = mouse.GetX();
@@ -170,7 +168,7 @@ void Game::HandleInput()
 	cam.m_pos.y = (player.m_pos.y + player.m_bbox.Height() / 2)* tile_size - gfx.ScreenHeight / 2;
 
 	SDL_FlushEvents(SDL_FIRSTEVENT, SDL_LASTEVENT);
-	while (SDL_PollEvent(&e));
+	//while (SDL_PollEvent(&e));
 }
 
 void Game::UpdateModel()
@@ -271,17 +269,6 @@ Trect<int> const & pick_correct_tile_rect(int x, int y, const QuadTree & terrain
 
 void Game::ComposeFrame()
 {
-	gfx.DrawRect(20, 20, 100, 100, Colors::Gray);
-	gfx.DrawCircle(500, 500, 150, Colors::Green);
-
-	gfx.DrawRect(50, 50, 150, 150, Colors::MakeRGBA(0x53u, 0x3eu, 0x2du, 0xff));
-
-	gfx.DrawRect(55, 55, 150, 150, Colors::MakeRGBA(0xdd, 0xca, 0x7d, 0xff));
-	
-
-
-	return;
-
 	// offset view by cam
 	Trect<double> view(
 		{ 0 + cam.m_pos.x - tile_size,0 + cam.m_pos.y - tile_size },

@@ -19,7 +19,6 @@ bool MovingEntity::GetTColl(const QuadTree & terrain)
 
 bool MovingEntity::GetBColl(const QuadTree & terrain)
 {
-	std::cout << GetBRect() << std::endl;
 	std::vector<const Node *> floor = terrain.range(GetBRect());
 	for (const auto & i : floor)
 		if (i->m_tile != tile_type::air)
