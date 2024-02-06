@@ -17,7 +17,7 @@ bool Keyboard::KeyIsPressed(const SDL_Scancode & scan_code)
 	//continuous-response keys
 	if (keystate != nullptr)
 		return keystate[scan_code];
-	return false;
+	return false;	
 }
 
 bool Keyboard::KeyWasPressedOnce(const SDL_Keycode & key_code)
@@ -25,6 +25,12 @@ bool Keyboard::KeyWasPressedOnce(const SDL_Keycode & key_code)
 	const Uint8 * keystate = SDL_GetKeyboardState(nullptr);
 	// non-continuous response keys
 	if (keystate != nullptr)
-		return keystate[key_code];
+	{
+		if (keystate[key_code])
+		{
+			SDL_PumpEvents();
+			return true;
+		}
+	}
 	return false;
 }

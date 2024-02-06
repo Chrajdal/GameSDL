@@ -89,7 +89,7 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	gfx.DrawFilledRect(50, 50, 150, 100, Colors::Cyan);
+	//gfx.DrawFilledRect(50, 50, 150, 100, Colors::Cyan);
 
 	gfx.DrawLine(points[0].m_x, points[0].m_y, points[1].m_x, points[1].m_y, Colors::LightGray);
 	gfx.DrawLine(points[1].m_x, points[1].m_y, points[3].m_x, points[3].m_y, Colors::LightGray);

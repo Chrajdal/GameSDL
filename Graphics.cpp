@@ -120,10 +120,10 @@ void Graphics::DrawLine(unsigned x1, unsigned y1, unsigned x2, unsigned y2, cons
 	lineRGBA(ren, x1, y1, x2, y2, c.GetR(), c.GetG(), c.GetB(), c.GetA());
 }
 
-void Graphics::DrawThickLine(unsigned width, unsigned x1, unsigned y1, unsigned x2, unsigned y2, const Color& color)
-{
-
-}
+//void Graphics::DrawThickLine(unsigned width, unsigned x1, unsigned y1, unsigned x2, unsigned y2, const Color& color)
+//{
+//
+//}
 
 void Graphics::DrawCircle(int _x, int _y, int radius, const Color & c)
 {
@@ -231,3 +231,9 @@ void Graphics::DrawPartImage(int x, int y, int fromx, int fromy, int width, int 
 
 	SDL_RenderCopy(ren, img.GetData(), &src, &m_pos);
 }
+
+//void Graphics::DrawFont(int x, int y, const Font & font)
+//{
+//	
+//}
+
