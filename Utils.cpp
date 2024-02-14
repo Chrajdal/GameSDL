@@ -6,13 +6,11 @@ int random_int(int min, int max)
 	int range = max - min + 1;
 	return (rand() % range) + min;
 }
-float random_between(const float & min, const float & max)
+
+template<typename T>
+T random_between(const T & min, const T & max)
 {
-	return (max - min) * ((float)rand() / (float)RAND_MAX) + min;
-}
-double random_between(const double & min, const double & max)
-{
-	return (max - min) * ((double)rand() / (double)RAND_MAX) + min;
+	return (max - min) * ((T)rand() / (T)RAND_MAX) + min;
 }
 
 long sq_distance(const Tpoint<int> & a, const Tpoint<int> & b)
@@ -35,6 +33,8 @@ double sq_distance(const Tpoint<double> & a, const Tpoint<double> & b)
 	return (double)((a.m_x - b.m_x) * (double)(a.m_x - b.m_x))
 		+ (double)((a.m_y - b.m_y) * (double)(a.m_y - b.m_y));
 }
+
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 bool equal(double a, double b)
